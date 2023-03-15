@@ -1258,7 +1258,7 @@ https://leetcode.com/problems/kth-smallest-element-in-a-bst/
 
 
 
-# Problem 20 - Validate Binary Search Tree
+# Problem 2 - Validate Binary Search Tree
 """
 https://leetcode.com/problems/validate-binary-search-tree/
 """
@@ -1279,7 +1279,7 @@ class Solution:
 
 
 
-# Problem 2 - Lowest Common Ancestor of a Binary Search Tree
+# Problem 3 - Lowest Common Ancestor of a Binary Search Tree
 """
 https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 """
@@ -1298,11 +1298,11 @@ class Solution:
 
 
 
-# Problem 3 - Construct a BST from a preorder traversal
+# Problem 4 - Construct a BST from a preorder traversal
 
-# Problem 4 - Inorder Successor in BST
+# Problem 5 - Inorder Successor in BST
 
-# Problem 5 - Convert Sorted Array to Binary Search Tree
+# Problem 6 - Convert Sorted Array to Binary Search Tree
 """
 https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
 Input: nums = [-10,-3,0,5,9]
@@ -1323,7 +1323,7 @@ class Solution:
 
         return buildBST(0, len(nums)-1)
 
-# Problem 6 - Binary Search Tree Iterator
+# Problem 7 - Binary Search Tree Iterator
 """
 * * Good Problem
 https://leetcode.com/problems/binary-search-tree-iterator
@@ -1357,7 +1357,7 @@ Output
 
 
 
-# Problem 7 - Two Sum In BST
+# Problem 8 - Two Sum In BST
 """
 https://leetcode.com/problems/two-sum-iv-input-is-a-bst/
 Check if there exists a pair with Sum K
@@ -1369,7 +1369,7 @@ Check if there exists a pair with Sum K
 
 
 
-# Problem 8 - Recover Binary Search Tree
+# Problem 9 - Recover Binary Search Tree
 """
 https://leetcode.com/problems/recover-binary-search-tree/
 """
@@ -1377,7 +1377,7 @@ https://leetcode.com/problems/recover-binary-search-tree/
 
 
 
-# Problem 9 - Trim a Binary Search Tree
+# Problem 10 - Trim a Binary Search Tree
 """
 https://leetcode.com/problems/trim-a-binary-search-tree/
 Given the root of a binary search tree and the lowest and highest boundaries as low and high, 
@@ -1403,7 +1403,7 @@ class Solution:
 
 
 
-# Problem 10 - Unique Binary Search Trees
+# Problem 11 - Unique Binary Search Trees
 """
 https://leetcode.com/problems/unique-binary-search-trees/
 Number of structurally unique BST's
@@ -1418,7 +1418,7 @@ C(n+1) = [2(2n + 1)/n + 2] x C(n)
 
 
 
-# Problem 11 - Convert BST to Greater Tree
+# Problem 12 - Convert BST to Greater Tree
 """
 https://leetcode.com/problems/convert-bst-to-greater-tree/
 Given the root of a Binary Search Tree (BST), convert it to a Greater Tree 
