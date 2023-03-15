@@ -3,6 +3,8 @@ import sys
 import math
 from typing import Optional
 import collections
+from collections import deque
+
 # Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -153,6 +155,10 @@ Given the root of a binary tree, return the length of the diameter of the tree.
 
 The diameter of a binary tree is the length of the longest path between any two nodes 
 in a tree. This path may or may not pass through the root.
+
+Input: root = [1,2,3,4,5]
+Output: 3
+Explanation: 3 is the length of the path [4,2,1,3] or [5,2,1,3].
 """
 # diameter at a node = left_height + right_height
 class Solution:
@@ -181,6 +187,10 @@ class Solution:
 """
 https://leetcode.com/problems/binary-tree-maximum-path-sum/
 Given the root of a binary tree, return the maximum path sum of any non-empty path.
+
+Input: root = [-10,9,20,null,null,15,7]
+Output: 42
+Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.
 """
 class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
@@ -193,7 +203,7 @@ class Solution:
 
             """
             * * note : here do not consider negative values as they will not be in max path sum
-            so we will have max(0,postOrder(node.left/right))
+            so we will have max(0, postOrder(node.left/right))
             """
             lf_val = max(0, postOrder(node.left))
             rt_val = max(0, postOrder(node.right))
@@ -518,7 +528,51 @@ class Solution:
 
 
 
-# Problem 14 - Maximum Width of Binary Tree
+# Problem 14 - Check Completeness of a Binary Tree
+"""
+https://leetcode.com/problems/check-completeness-of-a-binary-tree/
+Given the root of a binary tree, determine if it is a complete binary tree.
+
+In a complete binary tree, every level, except possibly the last, is completely filled, 
+and all nodes in the last level are as far left as possible. 
+It can have between 1 and 2h nodes inclusive at the last level h.
+
+Input: root = [1,2,3,4,5,6]
+Output: true
+
+Input: root = [1,2,3,4,5,null,7]
+Output: false
+"""
+# Solution: 
+# we will use BFS to solve this problem
+# we will push and pop until we don't get a null node (Yes we will also be adding null node to the q)
+# after we have found the null node (while poping) ==> in the rest of the queue if there 
+# is a non-null node then the tree is not complete (property of complete BT) 
+# if all remaing nodes are null then the tree is complete 
+class Solution:
+    def isCompleteTree(self, root: Optional[TreeNode]) -> bool:
+        q = deque([root])
+
+        while q:
+            node = q.popleft()
+
+            # if node is not null
+            if node:
+                q.append(node.left)
+                q.append(node.right)
+            
+            # if node is null
+            else:
+                # check if the remaining elements in the q is also null
+                while q:
+                    if q.popleft():
+                        return False
+        return True
+    
+
+
+
+# Problem 15 - Maximum Width of Binary Tree
 """
 * * Good question
 https://leetcode.com/problems/maximum-width-of-binary-tree/
@@ -563,7 +617,7 @@ class Solution:
 
 
 
-# Problem 15 - All Nodes Distance K in Binary Tree
+# Problem 16 - All Nodes Distance K in Binary Tree
 """
 Given the root of a binary tree, the value of a target node target, and an integer k, 
 return an array of the values of all nodes that have a distance k from the target node.
@@ -584,7 +638,7 @@ Output: [7,4,1]
 
 
 
-# Problem 16 - Construct Binary Tree from Preorder and Inorder Traversal
+# Problem 17 - Construct Binary Tree from Preorder and Inorder Traversal
 """
 https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 
@@ -622,7 +676,7 @@ class Solution:
 
 
 
-# Problem 17 - Serialize and Deserialize Binary Tree
+# Problem 18 - Serialize and Deserialize Binary Tree
 """
 https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 """        
@@ -669,7 +723,7 @@ class Codec:
 
 
 
-# Problem 18 - Flatten Binary Tree to Linked List
+# Problem 19 - Flatten Binary Tree to Linked List
 """
 * * Good question
 https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
@@ -702,7 +756,7 @@ class Solution:
 
 
 
-# Problem - Flatten a Multilevel Doubly Linked List
+# Problem 20 - Flatten a Multilevel Doubly Linked List
 """
 https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/description/
 same as flatten a tree
@@ -737,7 +791,7 @@ class Solution:
 
 
 
-# Problem 19 - Count Good Nodes in Binary Tree
+# Problem 21 - Count Good Nodes in Binary Tree
 """
 https://leetcode.com/problems/count-good-nodes-in-binary-tree/
 Given a binary tree root, a node X in the tree is named good if in the path from root to X 
@@ -778,7 +832,7 @@ class Solution:
 
 
 
-# Problem 20 - Invert Binary Tree
+# Problem 22 - Invert Binary Tree
 """
 https://leetcode.com/problems/invert-binary-tree/
 Given the root of a binary tree, invert the tree, and return its root.
@@ -801,7 +855,7 @@ class Solution:
 
 
 
-# Problem 21 - Merge Two Binary Trees
+# Problem 23 - Merge Two Binary Trees
 """
 https://leetcode.com/problems/merge-two-binary-trees/
 You are given two binary trees root1 and root2.
@@ -835,7 +889,7 @@ class Solution:
 
 
 
-# Problem 22 - House Robber III
+# Problem 24 - House Robber III
 """
 https://leetcode.com/problems/house-robber-iii
 Besides the root, each house has one and only one parent house. 
@@ -870,7 +924,7 @@ class Solution:
 
 
 
-# Problem 23 - Flip Equivalent Binary Trees
+# Problem 25 - Flip Equivalent Binary Trees
 """
 https://leetcode.com/problems/flip-equivalent-binary-trees/
 For a binary tree T, we can define a flip operation as follows: 
@@ -900,7 +954,7 @@ class Solution:
 
 
 
-# Problem 24 - Operations on Tree
+# Problem 26 - Operations on Tree
 """
 https://leetcode.com/problems/operations-on-tree/
 The data structure should support the following functions:
@@ -921,7 +975,7 @@ https://www.youtube.com/watch?v=qK4PtjrVD0U&list=PLot-Xpze53ldg4pN6PfzoJY7KsKcxF
 
 
 
-# Problem 25 - All Possible Full Binary Trees
+# Problem 27 - All Possible Full Binary Trees
 """
 https://leetcode.com/problems/all-possible-full-binary-trees/
 Given an integer n, return a list of all possible full binary trees with n nodes. 
@@ -957,7 +1011,7 @@ class Solution:
 
 
 
-# Problem 26 - Subtree of Another Tree
+# Problem 28 - Subtree of Another Tree
 """
 https://leetcode.com/problems/subtree-of-another-tree/
 Given the roots of two binary trees root and subRoot, 
@@ -994,7 +1048,7 @@ class Solution:
 
 
 
-# Problem 27 - Populating Next Right Pointers in Each Node
+# Problem 29 - Populating Next Right Pointers in Each Node
 """
 https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
 Populate each next pointer to point to its next right node. 
@@ -1085,7 +1139,7 @@ class Solution:
 
 
 
-# Problem 31 - Construct String from Binary Tree
+# Problem 30 - Construct String from Binary Tree
 """
 https://leetcode.com/problems/construct-string-from-binary-tree/
 Given the root of a binary tree, construct a string consisting of parenthesis 
@@ -1127,7 +1181,7 @@ class Solution:
 
 
 
-# Problem 32 - Path With Maximum Minimum Value
+# Problem 31 - Path With Maximum Minimum Value
 """
 https://leetcode.com/problems/path-with-maximum-minimum-value
 Given an m x n integer matrix grid, return the maximum score of a path starting at (0, 0) and 
@@ -1189,7 +1243,7 @@ Algorithm
 # =================================== BINARY SEARCH TREE PROBLEMS =======================================
 # =======================================================================================================
 
-# Problem 19 - K-th Smallest/Largest Element in BST
+# Problem 1 - K-th Smallest/Largest Element in BST
 """
 https://leetcode.com/problems/kth-smallest-element-in-a-bst/
 """
@@ -1225,7 +1279,7 @@ class Solution:
 
 
 
-# Problem 21 - Lowest Common Ancestor of a Binary Search Tree
+# Problem 2 - Lowest Common Ancestor of a Binary Search Tree
 """
 https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 """
@@ -1244,11 +1298,11 @@ class Solution:
 
 
 
-# Problem 22 - Construct a BST from a preorder traversal
+# Problem 3 - Construct a BST from a preorder traversal
 
-# Problem 23 - Inorder Successor in BST
+# Problem 4 - Inorder Successor in BST
 
-# Problem 22 - Convert Sorted Array to Binary Search Tree
+# Problem 5 - Convert Sorted Array to Binary Search Tree
 """
 https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
 Input: nums = [-10,-3,0,5,9]
@@ -1269,7 +1323,7 @@ class Solution:
 
         return buildBST(0, len(nums)-1)
 
-# Problem 24 - Binary Search Tree Iterator
+# Problem 6 - Binary Search Tree Iterator
 """
 * * Good Problem
 https://leetcode.com/problems/binary-search-tree-iterator
@@ -1303,7 +1357,7 @@ Output
 
 
 
-# Problem 25 - Two Sum In BST
+# Problem 7 - Two Sum In BST
 """
 https://leetcode.com/problems/two-sum-iv-input-is-a-bst/
 Check if there exists a pair with Sum K
@@ -1315,7 +1369,7 @@ Check if there exists a pair with Sum K
 
 
 
-# Problem 26 - Recover Binary Search Tree
+# Problem 8 - Recover Binary Search Tree
 """
 https://leetcode.com/problems/recover-binary-search-tree/
 """
@@ -1323,7 +1377,7 @@ https://leetcode.com/problems/recover-binary-search-tree/
 
 
 
-# Problem 27 - Trim a Binary Search Tree
+# Problem 9 - Trim a Binary Search Tree
 """
 https://leetcode.com/problems/trim-a-binary-search-tree/
 Given the root of a binary search tree and the lowest and highest boundaries as low and high, 
@@ -1349,7 +1403,7 @@ class Solution:
 
 
 
-# Problem 23 - Unique Binary Search Trees
+# Problem 10 - Unique Binary Search Trees
 """
 https://leetcode.com/problems/unique-binary-search-trees/
 Number of structurally unique BST's
@@ -1364,7 +1418,7 @@ C(n+1) = [2(2n + 1)/n + 2] x C(n)
 
 
 
-# Problem 28 - Convert BST to Greater Tree
+# Problem 11 - Convert BST to Greater Tree
 """
 https://leetcode.com/problems/convert-bst-to-greater-tree/
 Given the root of a Binary Search Tree (BST), convert it to a Greater Tree 
