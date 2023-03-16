@@ -593,7 +593,7 @@ class Solution:
             return 0
 
         queue = collections.deque()
-        queue.append((root, 0)) # <node, level>
+        queue.append((root, 0)) # <node, index>
 
         max_width = 0
         while queue:
@@ -604,7 +604,7 @@ class Solution:
             min_level = queue[0][1]
             q_len = len(queue)
 
-            for i in range(q_len):
+            for _ in range(q_len):
                 node, idx = queue.popleft()
                 idx = idx - min_level
                 if node.left:
@@ -672,6 +672,45 @@ class Solution:
             return root
         
         return dfs(0, len(preorder) - 1)
+
+
+
+
+# Problem - Construct Binary Tree from Inorder and Postorder Traversal
+"""
+Given two integer arrays inorder and postorder where inorder is the inorder traversal 
+of a binary tree and postorder is the postorder traversal of the same tree, construct and 
+return the binary tree.
+
+Input: inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+Output: [3,9,20,null,null,15,7]
+"""
+class Solution:
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
+        post_idx = len(postorder) - 1
+
+        def dfs(l, r):
+            nonlocal post_idx
+
+            if l > r:
+                return None
+
+            root_idx = 0
+            for k in range(l, r + 1):
+                if inorder[k] == postorder[post_idx]:
+                    root_idx = k
+                    break
+
+            node = TreeNode(postorder[post_idx])
+            post_idx -= 1
+
+            # note here right comes first and then left as it is post-order traversal
+            node.right = dfs(root_idx + 1, r)
+            node.left = dfs(l, root_idx-1)
+            
+            return node
+
+        return dfs(0, len(inorder)-1)
 
 
 
