@@ -1957,3 +1957,59 @@ Approach :
 2. Then we will use 1st island cells as multi-source BFS to find the 2nd island
 """
 # https://www.youtube.com/watch?v=gkINMhbbIbU&list=PLot-Xpze53ldBT_7QA8NVot219jFNr_GI&index=29
+
+
+
+
+# Problem 31 - Path With Maximum Minimum Value
+"""
+https://leetcode.com/problems/path-with-maximum-minimum-value
+Given an m x n integer matrix grid, return the maximum score of a path starting at (0, 0) and 
+ending at (m - 1, n - 1) moving in the 4 cardinal directions.
+
+The score of a path is the minimum value in that path.
+
+For example, the score of the path 8 → 4 → 5 → 9 is 4.
+
+Input: grid = [[5,4,5],[1,2,6],[7,4,6]]
+Output: 4
+"""
+# Has 2 good solutions 
+#  
+# Solution 1 : BFS + PriorityQueue 
+#  
+# Suppose we start from the top-left cell, check its two neighbors, and then visit 
+# the neighboring cell with the larger value. We can imagine that this newly visited 
+# cell will have other neighboring cells. Once again, we can consider all cells that 
+# neighbor the two visited cells and then visit the cell with the largest value. We can 
+# repeat these steps until we reach the bottom-right cell. Now we have a path of visited 
+# cells that connects the top-left cell to the bottom-right cell. Since, at each step, we 
+# always picked the unvisited neighbor with the largest value, it is guaranteed that the 
+# smallest value seen so far is the largest possible minimum value (the largest score) in 
+# a valid path. 
+"""
+Algorithm
+
+1. Initialize:
+    an empty priority queue pqpqpq and put the top-left cell in.
+    the status of all the cells as unvisited.
+    the minimum value min_valmin\_valmin_val as the value of the top-left cell.
+2. Pop the cell with the largest value from the priority queue, mark it as visited, 
+   and update the minimum value seen so far.
+3. Check if the current cell has any unvisited neighbors. If so, add them to the priority queue.
+4. Repeat from step 2 until we pop the bottom-right cell from the priority queue. 
+   Return the updated minimum value as the answer.
+""" 
+
+# Solution 2 : Union Find 
+"""
+Algorithm
+1. Sort all the cells decreasingly by their values.  
+   (flatten the matrix and sort it -- convert to  list)
+2. Iterate over the sorted cells from the largest value, for each visited cell, check if it has 
+   any 4-directionally connected visited neighbor cells, if so, 
+   we use the union-find data structure to connect it with its visited neighbors.
+3. Check if the top-left cell is connected with the bottom-right cell.
+4. If so, return the value of the last visited cell.
+5. Otherwise, repeat from the step 2.
+""" 
