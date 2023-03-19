@@ -2013,3 +2013,77 @@ Algorithm
 4. If so, return the value of the last visited cell.
 5. Otherwise, repeat from the step 2.
 """ 
+
+
+
+
+# Problem 32 - Accounts Merge
+"""
+https://leetcode.com/problems/accounts-merge/
+Given a list of accounts, we would like to merge these accounts.
+Two accounts definitely belong to the same person if there is some common email to both accounts.
+Note that even if two accounts have the same name, they may belong to different people as people 
+could have the same name.
+A person can have any number of accounts initially, but all of their accounts definitely have the 
+same name.
+
+Input: accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],
+                    ["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],
+                    ["John","johnnybravo@mail.com"]]
+
+Output: [["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],
+        ["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+"""
+# Union Find 
+
+class UnionFind:
+    def __init__(self, n) -> None:
+        self.parent = [i for i in range(n)]
+        self.rank = [1] * n
+
+    def find(self, node):
+        tmp = node
+        while tmp != self.parent[tmp]:
+            self.parent[tmp] = self.parent[self.parent[tmp]]
+            tmp = self.parent[node]
+        return tmp
+    
+    def union(self, node1, node2)-> bool:
+        p1, p2  = self.find(node1), self.find(node2)
+
+        if p1 == p2:
+            return False
+        
+        if self.rank[p1] > self.rank[p2]:
+            self.parent[p2] = p1
+            self.rank[p1] += 1
+        else:
+            self.parent[p1] = p2
+            self.rank[p2] += 1
+        return True
+
+
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        union_find = UnionFind(len(accounts))
+
+        email_2_account = {} # email : account_index
+
+        for idx, account in enumerate(accounts):
+            for email in account[1:]:
+                if email in email_2_account:
+                    union_find.union(idx, email_2_account[email])
+                else:
+                    email_2_account[email] = idx
+
+        emailGroup = defaultdict(list)
+        for email, idx in email_2_account.items():
+            leader = union_find.find(idx)
+            emailGroup[leader].append(email)
+
+        res = []
+        for idx, email in emailGroup.items():
+            acc_name = accounts[idx][0]
+            res.append([acc_name] + sorted(emailGroup[idx]))
+
+        return res

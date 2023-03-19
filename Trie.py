@@ -63,3 +63,66 @@ class Trie:
             curr = curr.children[c]
 
         return True
+    
+
+
+
+# Problem 2 - Design Add and Search Words Data Structure
+"""
+https://leetcode.com/problems/design-add-and-search-words-data-structure
+Design a data structure that supports adding new words and finding if a s
+tring matches any previously added string.
+
+Implement the WordDictionary class:
+1. WordDictionary() Initializes the object.
+2. void addWord(word) Adds word to the data structure, it can be matched later.
+3. bool search(word) Returns true if there is any string in the data structure 
+   that matches word or false otherwise. word may contain dots '.' where dots can 
+   be matched with any letter.
+
+Input
+["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+Output
+[null,null,null,null,false,true,true,true]
+"""
+class TrieNode:
+    def __init__(self) -> None:
+        self.children = {}
+        self.end_of_word = False
+        
+class WordDictionary:
+
+    def __init__(self):
+        self.root = TrieNode()
+
+    def addWord(self, word: str) -> None:
+        curr = self.root
+
+        for char in word:
+            if char not in curr.children:
+                curr.children[char] = TrieNode()
+            
+            curr = curr.children[char]
+        
+        curr.end_of_word = True
+
+    def search(self, word: str) -> bool:
+
+        def dfs(idx, root):
+            curr = root
+
+            for i in range(idx, len(word)):
+                char = word[i]
+                if char == ".":
+                    for child in curr.children.values():
+                        if dfs(i + 1, child):
+                            return True
+                    return False
+                else:
+                    if char not in curr.children:
+                        return False
+                    curr = curr.children[char]
+
+            return curr.end_of_word
+        return dfs(0, self.root)

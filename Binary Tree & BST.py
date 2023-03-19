@@ -1222,13 +1222,23 @@ class Solution:
 
 
 
+
 # =======================================================================================================
 # =================================== BINARY SEARCH TREE PROBLEMS =======================================
 # =======================================================================================================
 
+
+
+
+
 # Problem 1 - K-th Smallest/Largest Element in BST
 """
 https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+Given the root of a binary search tree, and an integer k, return the kth smallest 
+value (1-indexed) of all the values of the nodes in the tree.
+
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+Output: 3
 """
 # Solution :  
 # Approach 1 : Using in-order traversal in BST, store the value in a list and
@@ -1244,6 +1254,11 @@ https://leetcode.com/problems/kth-smallest-element-in-a-bst/
 # Problem 2 - Validate Binary Search Tree
 """
 https://leetcode.com/problems/validate-binary-search-tree/
+Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+
+Input: root = [5,1,4,null,null,3,6]
+Output: false
+Explanation: The root node's value is 5 but its right child's value is 4.
 """
 class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
@@ -1258,6 +1273,7 @@ class Solution:
             return checkIsValid(node.left, left_bound, node.val) and checkIsValid(node.right, node.val, right_bound)
 
         return checkIsValid(root, -math.inf, math.inf)
+
 
 
 
@@ -1378,7 +1394,85 @@ Check if there exists a pair with Sum K
 # Problem 9 - Recover Binary Search Tree
 """
 https://leetcode.com/problems/recover-binary-search-tree/
+You are given the root of a binary search tree (BST), 
+where the values of exactly two nodes of the tree were swapped by mistake.
+
+Recover the tree without changing its structure.
+
+Input: root = [1,3,null,null,2]
+Output: [3,1,null,null,2]
+Explanation: 3 cannot be a left child of 1 because 3 > 1. Swapping 1 and 3 makes the BST valid.
+
+Input: root = [3,1,4,null,null,2]
+Output: [2,1,4,null,null,3]
+Explanation: 2 cannot be in the right subtree of 3 because 2 < 3. 
+Swapping 2 and 3 makes the BST valid.
 """
+# Solution : 
+# As we know that there are exactly two nodes that are swapped 
+# There are two cases to the problem :
+# 1. Swapped nodes are not adjacent 
+#       E.g.: 3, 25, 7, 8, 10, 15, 20, 5
+#                 |  ^                 |
+#   first violation  middle            second violation
+#                    (whose 1st has violation)                   
+#    ==> here we will swap first and second violation 
+# 
+# # if there is no second violation then it is the second case
+#  
+# 2. Swapped nodes are adjacent 
+#          E.g.: 3, 5, 8, 7, 10, 15, 20, 25 
+#                      |  ^
+#        first violation  middle                  and no second violation
+#    ==> here we will swap prev and first violation
+
+class Solution:
+    def recoverTree(self, root: Optional[TreeNode]) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """ 
+        # here we will keep track of 4 pointers
+        # first - keep track of first violation
+        # second - will keep track of second violation
+        # middle - element associated with first violation
+        # prev - prev element in in-order traversal
+
+        first = second = middle = None
+        prev = TreeNode(-math.inf)
+
+        def inOrder(node):
+            nonlocal first, second, middle, prev
+
+            if not node:
+                return
+            
+            inOrder(node.left)
+
+            if node.val < prev.val:
+                # if first violation
+                if first is None:
+                    first = prev
+                    middle = node
+                # its the second violation
+                else:
+                    second = node
+
+            prev = node
+            inOrder(node.right)
+            
+
+        inOrder(root)
+
+        # case 1 : Swapped nodes are not adjacent 
+        if first and second:
+            # swap first and second 
+            first.val, second.val = second.val, first.val
+
+        # case 2 : Swapped nodes are adjacent 
+        elif first and middle:
+            # swap first and second 
+            first.val, middle.val = middle.val, first.val
+
 
 
 
@@ -1419,8 +1513,31 @@ Formula:
 C(0) = 1
 
 C(n+1) = [2(2n + 1)/n + 2] x C(n)
-"""
 
+https://www.youtube.com/watch?v=Ox0TenN3Zpg&t
+"""
+class Solution:
+    def numTrees(self, n: int) -> int:
+        # numTrees[4] = numTrees[0] * numTrees[3] + 
+        #               numTrees[1] * numTrees[2] + 
+        #               numTrees[2] * numTrees[1] + 
+        #               numTrees[3] * numTrees[0]
+
+        # 0 node = 1 tree
+        # 1 node = 1 tree
+        dp = [1] * (n + 1)
+
+        for node in range(2, n + 1):
+            sum_of_trees = 0
+            for root in range(1, node + 1):
+                left_subtree = root - 1 
+                right_subtree = node - root
+
+                sum_of_trees += dp[left_subtree] * dp[right_subtree] 
+            
+            dp[node] = sum_of_trees
+
+        return dp[n]
 
 
 
