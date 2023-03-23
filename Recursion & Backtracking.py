@@ -565,3 +565,48 @@ class Solution:
 
         return result
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+# 10. Beautiful Arrangement
+"""
+https://leetcode.com/problems/beautiful-arrangement/
+Suppose you have n integers labeled 1 through n. A permutation of those n integers perm (1-indexed) 
+is considered a beautiful arrangement if for every i (1 <= i <= n), either of the following is true:
+1. perm[i] is divisible by i.
+2. i is divisible by perm[i].
+Given an integer n, return the number of the beautiful arrangements that you can construct.
+
+Input: n = 2
+Output: 2
+Explanation: 
+The first beautiful arrangement is [1,2]:
+    - perm[1] = 1 is divisible by i = 1
+    - perm[2] = 2 is divisible by i = 2
+The second beautiful arrangement is [2,1]:
+    - perm[1] = 2 is divisible by i = 1
+    - i = 2 is divisible by perm[2] = 1
+"""
+# Solution : After swapping in backtracking check if the generated permutaion is valid
+# rest code is all same
+class Solution:
+    def countArrangement(self, n: int) -> int:
+        count = 0
+        arr = list(range(1, n+1))
+
+        def backtracking(index):
+            nonlocal count
+            if index == n:
+                count += 1
+                return
+
+            for i in range(index, n):
+                arr[index], arr[i] = arr[i], arr[index]
+                # check if the current is valid arrangement
+                if arr[index] % (index+1) == 0 or (index+1) % arr[index] == 0:
+                    backtracking(index+1)
+                arr[index], arr[i] = arr[i], arr[index]
+
+        backtracking(0)
+        return count

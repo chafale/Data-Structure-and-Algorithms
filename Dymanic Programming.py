@@ -39,9 +39,9 @@ Recursion/Memoization -> Tabulation -> optimize
 
 # Problem - 1 Climbing Stairs
 """
+https://leetcode.com/problems/climbing-stairs/
 You are climbing a staircase. It takes n steps to reach the top.
 Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
-https://leetcode.com/problems/climbing-stairs/
 """
 class Solution:
     def climbStairs(self, n: int) -> int:
@@ -58,11 +58,15 @@ class Solution:
 
 # Problem - 2 Frog Jump
 """
+https://www.codingninjas.com/codestudio/problems/frog-jump_3621012
 Given zero based indexes frog can either jump 1 or 2 steps.
 Energy used in jump is given by ht[j] - ht[i]
 Min energy to reach the last step.
 
 U are given heights array
+
+Input : [10, 20, 30, 10]
+Output : 20
 """
 def frogJump(n: int, heights: List[int]) -> int:
     dp = [0 for i in range(n)]
@@ -106,9 +110,12 @@ def frogJump(n: int, heights: List[int]) -> int:
 
 # Problem - 3 Maximum sum of non-adjacent elements
 """
+https://www.codingninjas.com/codestudio/problems/maximum-sum-of-non-adjacent-elements_843261
 You are given an array/list of 'N' integers. 
 You are supposed to return the maximum sum of the subsequence with the constraint that 
 no two elements are adjacent in the given array/list.
+Input : a = [2, 4, 1, 9]
+Output : 11
 """
 # since it's non adjacent then its subsequence
 # recurrence
@@ -206,6 +213,7 @@ Total amount you can rob = 1 + 3 = 4.
 
 # Problem - 6 Ninja's Training
 """
+https://www.codingninjas.com/codestudio/problems/ninja-s-training_3621003
 Ninja is planing this 'N' days-long training schedule. 
 Each day, he can perform any one of these three activities. 
 (Running, Fighting Practice or Learning New Moves). 
@@ -216,6 +224,9 @@ Can you help Ninja find out the maximum merit points Ninja can earn?
 You are given a 2D array of size N*3 *POINTS' with the points corresponding to 
 each day and activity. Your task is to calculate the maximum number of merit 
 points that Ninja can earn.
+
+Input : points = [[1,2,5], [3,1,1], [3,3,3]]
+Output : 11 (5 + 3 + 3)
 """
 # recurrence
 points = []

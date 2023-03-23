@@ -98,3 +98,76 @@ class Solution:
                 no_of_boats += 1
                 r -= 1
         return no_of_boats
+    
+
+
+
+# 4. Jump Game 
+"""
+https://leetcode.com/problems/jump-game
+You are given an integer array nums. You are initially positioned at the array's first index, 
+and each element in the array represents your maximum jump length at that position.
+
+Return true if you can reach the last index, or false otherwise.
+
+Example 1:
+Input: nums = [2,3,1,1,4]
+Output: true
+Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+
+Example 2:
+Input: nums = [3,2,1,0,4]
+Output: false
+Explanation: You will always arrive at index 3 no matter what. 
+Its maximum jump length is 0, which makes it impossible to reach the last index.
+
+https://www.youtube.com/watch?v=Yan0cv2cLy8
+"""
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        goal_post = len(nums) - 1
+
+        for i in range(len(nums) -1, -1, -1):
+            if i + nums[i] >= goal_post:
+                goal_post = i
+
+        return True if goal_post == 0 else False
+
+
+
+
+# 5. Jump Game II
+"""
+You are given a 0-indexed array of integers nums of length n. 
+You are initially positioned at nums[0].
+
+Each element nums[i] represents the maximum length of a forward jump from index i. 
+In other words, if you are at nums[i], you can jump to any nums[i + j]
+
+Return the minimum number of jumps to reach nums[n - 1]. 
+The test cases are generated such that you can reach nums[n - 1].
+
+Example 1:
+Input: nums = [2,3,1,1,4]
+Output: 2
+Explanation: The minimum number of jumps to reach the last index is 2. 
+             Jump 1 step from index 0 to 1, then 3 steps to the last index.
+
+Example 2:
+Input: nums = [2,3,0,1,4]
+Output: 2
+"""
+# we will use the concept of BFS to solve this problem
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        l = r = 0
+        level = 0
+        while r < len(nums) - 1:
+            farthest = 0
+            for i in range(l, r + 1):
+                farthest = max(farthest, i + nums[i])
+            l = r + 1
+            r = farthest
+            level += 1
+        
+        return level

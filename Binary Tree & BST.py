@@ -1220,7 +1220,38 @@ class Solution:
 
 
 
+# Problem 31 - Minimum Cost Tree From Leaf Values
+"""
+Given an array arr of positive integers, consider all binary trees such that:
+* Each node has either 0 or 2 children;
+* The values of arr correspond to the values of each leaf in an in-order traversal of the tree.
+* The value of each non-leaf node is equal to the product of the largest leaf value in its left 
+  and right subtree, respectively.
 
+Among all possible binary trees considered, return the smallest possible sum of the 
+values of each non-leaf node.
+
+Input: arr = [6,2,4]
+Output: 32
+Explanation: There are two possible trees shown.
+The first has a non-leaf node sum 36, and the second has non-leaf node sum 32.
+         24                  24
+      12     4     OR      6    8
+    6    2                    2    4
+"""
+# for k from i to j:
+# res(i, j) = min(res(i, k) + res(k + 1, j) + max(arr[i] ... arr[k]) * max(arr[k + 1] ... arr[j]))
+arr = []
+def f(l, r):
+    if l >= r:
+        return 0
+    
+    min_sum = math.inf
+    for k in range(l, r):
+        val = max(arr[l: k+1]) * max(arr[k+1:r+1]) + f(l,k) + f(k+1,r)
+        min_sum = min(min_sum, val)
+
+    return min_sum
 
 
 # =======================================================================================================
@@ -1538,6 +1569,7 @@ class Solution:
             dp[node] = sum_of_trees
 
         return dp[n]
+
 
 
 

@@ -146,3 +146,57 @@ Where two elements a[i] and a[j] form an inversion if a[i] > a[j] and i < j.
 
 
 
+# 6. Minimum Moves to Equal Array Elements
+"""
+https://leetcode.com/problems/minimum-moves-to-equal-array-elements
+Given an integer array nums of size n, return the minimum number of moves required 
+to make all array elements equal.
+
+In one move, you can increment n - 1 elements of the array by 1.
+"""
+# Two approach to solve this problem
+# Approach 1 - TLE
+"""
+The last element is the largest element. Therefore, diff=a[n-1]-a[0]. 
+We add diff to all the elements except the last one i.e. a[n-1].
+Now, the updated element at index 0 ,a'[0] is now equal to the previous largest element 
+a[n-1]. 
+Thus, after updation, the element a''[n-2] will become the largest element we will swap
+with the previous largest and do this step again until we obtain a sorted array
+"""
+# Approach 2 - 
+"""
+The given problem can be simplified if we sort the given array once. 
+If we consider a sorted array aaa, instead of trying to work on the complete problem of equalizing 
+every element of the array, we can break the problem for array of size nnn into problems of solving 
+arrays of smaller sizes. Assuming, the elements upto index i-1 have been equalized, we can simply 
+consider the element at index i and add the difference diff=a[i]-a[i-1] to the total number of moves 
+for the array upto index i to be equalized i.e. moves=moves+diff
+But when we try to proceed with this step, as per a valid move, the elements following a[i]
+will also be incremented by the amount diff i.e. a[j]=a[j]+diff, for j>i. 
+But while implementing this approach, we need not increment all such a[j]'s. 
+Instead, we'll add the number of moves done so far to the current element i.e. 
+a[i] and update it to a'[i]=a[i]+moves
+[i]=a[i]+moves.
+
+Pseudo code :
+
+nums.sort()
+
+Initially moves = 0
+for every elem starting at index 1:
+    diff = moves + nums[i] - nums[i-1]
+    nums[i] = nums[i] + moves
+    moves = moves + diff
+"""
+class Solution:
+    def minMoves(self, nums: List[int]) -> int:
+        nums.sort()
+
+        moves = 0
+        for i in range(1, len(nums)):
+            diff = moves + nums[i] - nums[i-1]
+            nums[i] += moves
+            moves += diff
+
+        return moves

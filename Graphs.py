@@ -517,6 +517,7 @@ class DisjointSet:
         self.parent = [i for i in range(nodes)]
         self.rank = [1 for i in range(nodes)]
 
+
     def find_parent(self, node):
         if node == self.parent[node]:
             return node
@@ -2042,11 +2043,10 @@ class UnionFind:
         self.rank = [1] * n
 
     def find(self, node):
-        tmp = node
-        while tmp != self.parent[tmp]:
-            self.parent[tmp] = self.parent[self.parent[tmp]]
-            tmp = self.parent[node]
-        return tmp
+        while self.parent[node] != node:
+            self.parent[node] = self.parent[self.parent[node]]
+            node = self.parent[node]
+        return node
     
     def union(self, node1, node2)-> bool:
         p1, p2  = self.find(node1), self.find(node2)
@@ -2086,4 +2086,106 @@ class Solution:
             acc_name = accounts[idx][0]
             res.append([acc_name] + sorted(emailGroup[idx]))
 
+        return res
+    
+
+
+
+# Problem 33 - Jump Game III
+"""
+Given an array of non-negative integers arr, you are initially positioned at 
+start index of the array. When you are at index i, you can jump to i + arr[i] or i - arr[i], 
+check if you can reach to any index with value 0.
+
+Example 1:
+Input: arr = [4,2,3,0,3,1,2], start = 5
+Output: true
+Explanation: 
+All possible ways to reach at index 3 with value 0 are: 
+index 5 -> index 4 -> index 1 -> index 3 
+index 5 -> index 6 -> index 4 -> index 1 -> index 3 
+
+Example 2:
+Input: arr = [4,2,3,0,3,1,2], start = 0
+Output: true 
+Explanation: 
+One possible way to reach at index 3 with value 0 is: 
+index 0 -> index 4 -> index 1 -> index 3
+
+Example 3:
+Input: arr = [3,0,2,1,2], start = 2
+Output: false
+Explanation: There is no way to reach at index 1 with value 0.
+"""
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        q = deque()
+        q.append([start, arr[start]])
+        visited = set()
+        visited.add(start)
+
+        while q:
+            idx, val = q.popleft()
+            if val == 0:
+                return True
+            
+            rt_jump = idx + val
+            lf_jump = idx - val
+
+            if rt_jump < len(arr) and (rt_jump) not in visited:
+                q.append([rt_jump, arr[rt_jump]])
+                visited.add(rt_jump)
+
+            if lf_jump >= 0 and (lf_jump) not in visited:
+                q.append([lf_jump, arr[lf_jump]])
+                visited.add(lf_jump)
+
+        return False
+    
+
+
+
+# Problem 34 - Minimum Score of a Path Between Two Cities
+"""
+https://leetcode.com/problems/minimum-score-of-a-path-between-two-cities
+The score of a path between two cities is defined as the minimum distance of a road in this path.
+Return the minimum possible score of a path between cities 1 and n.
+
+Example 1:
+Input: n = 4, roads = [[1,2,9],[2,3,6],[2,4,5],[1,4,7]]
+Output: 5
+Explanation: The path from city 1 to 4 with the minimum score is: 1 -> 2 -> 4. 
+The score of this path is min(9,5) = 5.
+It can be shown that no other path has less score.
+
+Example 2:
+Input: n = 4, roads = [[1,2,2],[1,3,4],[3,4,7]]
+Output: 2
+Explanation: The path from city 1 to 4 with the minimum score is: 1 -> 2 -> 1 -> 3 -> 4. 
+The score of this path is min(2,2,4,7) = 2.
+"""
+# Solution : sol to this problem is quite simple -- we just need to find the edge with min cost
+class Solution:
+    def minScore(self, n: int, roads: List[List[int]]) -> int:
+        # implementing dijkstras algorithm
+        adj_list = defaultdict(dict)
+        for u, v, dist in roads:
+            adj_list[u][v] = dist
+            adj_list[v][u] = dist
+        
+        visited = set()
+        res = 1000000
+
+        def dfs(node):
+            nonlocal res
+
+            if node in visited:
+                return
+            
+            visited.add(node)
+            for neighbour, dist in adj_list[node].items():
+                res = min(res, dist)
+                dfs(neighbour)
+
+        dfs(1)
         return res
