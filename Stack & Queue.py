@@ -55,3 +55,49 @@ class Solution:
                         q.append((i+1, "R"))
 
         return "".join(dominoes)
+
+
+
+
+# 2.  Largest Rectangle in Histogram
+"""
+Given an array of integers heights representing the histogram's bar height 
+where the width of each bar is 1, return the area of the largest rectangle in the histogram.
+
+Link : https://leetcode.com/problems/largest-rectangle-in-histogram/
+"""
+
+# Approach : using monotonic increasing stack
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        stack = []
+        max_area = 0
+        for index, height in enumerate(heights):
+            start = index
+            while stack and stack[-1][1] > height:
+                i, h = stack.pop()
+                max_area = max(max_area, h * (index - i))
+                start = i
+            stack.append([start, height])
+        
+        while stack:
+            i, h = stack.pop()
+            max_area = max(max_area, h * (len(heights) - i))
+        return max_area
+    
+
+
+
+# 3. Maximum Frequency Stack
+"""
+https://leetcode.com/problems/maximum-frequency-stack/
+Design a stack-like data structure to push elements to the stack and pop the most frequent element 
+from the stack.
+
+Implement the FreqStack class:
+1. FreqStack() constructs an empty frequency stack.
+2. void push(int val) pushes an integer val onto the top of the stack.
+3. int pop() removes and returns the most frequent element in the stack.
+    If there is a tie for the most frequent element, the element closest to the stack's top is 
+    removed and returned.
+"""

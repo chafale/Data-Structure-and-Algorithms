@@ -101,3 +101,61 @@ pseudo code:
 """
 https://leetcode.com/problems/sort-colors/
 """
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        
+        pointer_0 = 0
+        pointer_2 = len(nums)-1
+        
+        mid = 0
+        while(mid <= pointer_2): 
+            # mid = 2
+            if nums[mid] == 2: 
+                nums[mid], nums[pointer_2] = nums[pointer_2], nums[mid]
+                pointer_2 -= 1
+                # Note : we don't increment mid here
+
+            # mid = 0
+            elif nums[mid] == 0:
+                nums[mid], nums[pointer_0] = nums[pointer_0], nums[mid]
+                pointer_0 += 1
+                mid += 1
+
+            # mid = 1
+            else:
+                mid += 1
+
+
+
+
+# 5. Majority Element - Boyer Moore Algorithm
+"""
+https://leetcode.com/problems/majority-element/
+Given an array nums of size n, return the majority element.
+Follow-up: Could you solve the problem in linear time and in O(1) space?
+
+Input: nums = [2,2,1,1,1,2,2]
+Output: 2
+
+Input: nums = [3,2,3]
+Output: 3
+"""
+class Solution:
+    def majorityElement(self, nums):
+        count = 0
+        candidate = None
+
+        for num in nums:
+            # when count is zero change the candidate element
+            if count == 0:
+                candidate = num
+
+            if num == candidate:
+                count += 1
+            else:
+                count += -1
+
+        return candidate
