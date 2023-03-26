@@ -1650,6 +1650,7 @@ pseudo code:
     for (idx = 0 -> n-1):
         for (prev = 0 -> idx - 1):
             if nums[prev] < nums[idx] and dp[idx] > 1 + dp[prev]:
+                dp[idx] = max(dp[idx], 1 + dp[prev])
             elif nums[prev] < nums[idx] and dp[idx] == 1 + dp[prev]:
                 count[idx] += count[prev]
 
