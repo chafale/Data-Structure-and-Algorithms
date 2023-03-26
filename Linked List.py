@@ -68,6 +68,15 @@ class Solution:
 """
 https://leetcode.com/problems/middle-of-the-linked-list/
 Given the head of a singly linked list, return the middle node of the linked list.
+
+If there are two middle nodes, return the second middle node.
+
+Input: head = [1,2,3,4,5]
+Output: 3
+Explanation: The middle node of the list is node 3.
+
+Input: head = [1,2,3,4,5,6]
+Output: [4,5,6]
 """
 # Sol : Using fast and slow pointer
 class Solution:
@@ -80,7 +89,18 @@ class Solution:
 
 
 
-# Basic 3 - 
+# Basic 3 - Inplace merge two Linklist
+# merge two sorted linked lists [Problem 21]
+# merge 1->2->3->4 and 6->5->4 into 1->6->2->5->3->4
+first, second = head, prev
+while second.next:
+    tmp = first.next
+    first.next = second
+    first = tmp
+    
+    tmp = second.next
+    second.next = first
+    second = tmp
 
 
 
@@ -118,7 +138,8 @@ The list should be made by splicing together the nodes of the first two lists.
 
 Return the head of the merged linked list.
 
-
+Input: list1 = [1,2,4], list2 = [1,3,4]
+Output: [1,1,2,3,4,4]
 """
 class Solution:
     def mergeTwoLists(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
@@ -292,3 +313,22 @@ set to null.
 Input: head = [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
 Output: [1,2,3,7,8,11,12,9,10,4,5,6]
 """
+class Solution:
+    def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        last = None
+        def flatten_LL(node):
+            nonlocal last
+            if not node:
+                return None
+
+            flatten_LL(node.next)
+            flatten_LL(node.child)
+
+            node.next = last
+            node.child = None
+            if last:
+                last.prev = node
+            last = node
+
+        flatten_LL(head)
+        return head

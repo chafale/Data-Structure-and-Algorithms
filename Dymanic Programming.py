@@ -670,6 +670,12 @@ def binary_knapsack(wt, profit, W):
 """
 Find the min number of coins to reach the target sum.
 u can pick a certain coin infinite number of times
+
+Input: coins[] = {25, 10, 5}, V = 30
+Output: Minimum 2 coins required We can use one coin of 25 cents and one of 5 cents 
+
+Input: coins[] = {9, 6, 5, 1}, V = 11
+Output: Minimum 2 coins required We can use one coin of 6 cents and 1 coin of 5 cents
 """
 coins = []
 def f(idx, target):
@@ -767,6 +773,24 @@ Return the number of combinations that make up that amount.
 
 If that amount of money cannot be made up by any combination of the coins, return 0.
 """
+# finding the number of ways to reach the target
+def f(idx, target):
+    if idx == 0:
+        if target % coins[0] == 0:
+            return 1
+        else:
+            return 0
+        
+    # pick
+    pick = 0
+    if coins[idx] <= target:
+        pick = f(idx, target - coins[idx])
+
+    # not pick
+    not_pick = f(idx - 1, target)
+
+    return pick + not_pick
+ 
 class Solution:
     def change(self, amount: int, coins: List[int]) -> int:
         n = len(coins)
@@ -783,7 +807,7 @@ class Solution:
                 if coins[idx] <= amt:
                     pick = dp[idx][amt - coins[idx]]
 
-                not_pick = 0 + dp[idx-1][amt]
+                not_pick = dp[idx-1][amt]
 
                 dp[idx][amt] = pick + not_pick
 
@@ -795,10 +819,12 @@ class Solution:
 
 
 
-# Problem 22 - Unbounded Knapsack
+# Problem 22 - Unbounded Binary Knapsack
 """
 In this problem u can choose knapsack wt's infinite number of times (no bound on number of wts
-you can pick, <In 0/1 Knapsack u can pick a certain wts only once>)
+you can pick, <In 0/1 Knapsack u can pick a certain wts only once>
+
+U need to maximize the profit.
 
 wt = [2, 4, 5]
 val = [5, 11, 13]
@@ -835,11 +861,28 @@ Given a rod of length n  and array prices of length n denoting the cost of piece
 of the rod of length 1 to n, 
 find the maximum amount that can be made if the rod is cut up optimally.
 
+For example, if the length of the rod is 8 and the values of different pieces are given 
+as the following, then the maximum obtainable value is 22 
+(by cutting in two pieces of lengths 2 and 6) 
+
+length   | 1   2   3   4   5   6   7   8  
+--------------------------------------------
+price    | 1   5   8   9  10  17  17  20
+
+And if the prices are as follows, then the maximum obtainable value is 24 
+(by cutting in eight pieces of length 1) 
+
+length   | 1   2   3   4   5   6   7   8  
+--------------------------------------------
+price    | 3   5   8   9  10  17  17  20
+
+
 Input 1:
 n = 8, prices[] = [1, 3, 4, 5, 7, 9, 10, 11]
 Output 1:
 12
 """
+# Unbounded Binary knapsack problem
 # Approach :
 # we will try to pick length [1, 2, 3, 4, 5] and sum them up to len of rod
 # to maximize the profits  
@@ -989,11 +1032,11 @@ Input: s = "babgbag", t = "bag"
 Output: 5
 Explanation:
 As shown below, there are 5 ways you can generate "bag" from s.
-babgbag
-babgbag
-babgbag
-babgbag
-babgbag
+[ba]b[g]bag
+[ba]bgba[g]
+[b]abgb[ag]
+ba[b]gb[ag]
+babg[bag]
 """
 # for s1 -> i and t -> j
 s = "babgbag"
