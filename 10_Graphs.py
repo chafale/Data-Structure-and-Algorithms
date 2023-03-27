@@ -1735,7 +1735,7 @@ if you start at the top left square (0, 0).
 
 Hint : use heap
 
-https://www.youtube.com/watch?v=a mvrKlMLuGY&list=PLot-Xpze53ldBT_7QA8NVot219jFNr_GI&index=19
+https://www.youtube.com/watch?v=amvrKlMLuGY&list=PLot-Xpze53ldBT_7QA8NVot219jFNr_GI&index=19
 """
 class Solution:
     def swimInWater(self, grid: List[List[int]]) -> int:
