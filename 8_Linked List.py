@@ -339,3 +339,36 @@ class Solution:
 
         flatten_LL(head)
         return head
+    
+
+
+
+# 10 . Copy List with Random Pointer
+"""
+https://leetcode.com/problems/copy-list-with-random-pointer
+Construct a deep copy of the list. 
+Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
+"""
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        old_new = {}
+        def dfs(node):
+            if not node:
+                return None
+
+            if node in old_new:
+                return old_new[node]
+
+            new_node = Node(node.val)
+            old_new[node] = new_node
+
+            new_node.next = dfs(node.next)
+            new_node.random = dfs(node.random)
+
+            return new_node
+        return dfs(head)
+    
+
+
+
