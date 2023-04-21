@@ -523,13 +523,13 @@ Count the number of subsets in the array having target sum = k.
 # ============================
 arr = []
 def f(idx, target):
-    if target == 0:
-        return 1
+    if target < 0:
+        return 0
 
-    if idx == 0:
-        if target == arr[0]:
+    if idx == len(arr):
+        if target == 0:
             return 1
-        else: return 0
+        return 0
 
     # not pick
     not_pick = f(idx + 1, target)
@@ -575,7 +575,7 @@ s1 - s2 = d and s1 > s2, where s1,s2 are sum of two subsets.
 """
 # Solution :  
 # s1 + s2 = total and given s1 - s2 = d
-# therefore we can say s2 = tot - d / 2
+# therefore we can say s2 = (tot - d) / 2
 # 
 # some cases to consider tot - d cannot be neg so tot - d > 0
 # and (tot - d ) must be even
@@ -1387,7 +1387,7 @@ https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
 # only one condition to add i.e. we can only buy after a gap of one period after sell
 prices = []
 def f(idx, canBuy):
-    if idx == len(prices):
+    if idx >= len(prices):
         return 0
     profit = 0
     if canBuy:
@@ -2039,3 +2039,57 @@ https://leetcode.com/problems/russian-doll-envelopes/
 """
 https://leetcode.com/problems/maximum-height-by-stacking-cuboids/
 """
+
+
+
+
+# Problem 51 - Last Stone Weight II
+"""
+You are given an array of integers stones where stones[i] is the weight of the ith stone.
+We are playing a game with the stones. On each turn, we choose any two stones and smash them 
+together. Suppose the stones have weights x and y with x <= y. The result of this smash is:
+* If x == y, both stones are destroyed, and
+* If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.
+At the end of the game, there is at most one stone left.
+Return the smallest possible weight of the left stone. If there are no stones left, return 0.
+
+Input: stones = [2,7,4,1,8,1]
+Output: 1
+Explanation:
+We can combine 2 and 4 to get 2, so the array converts to [2,7,1,8,1] then,
+we can combine 7 and 8 to get 1, so the array converts to [2,1,1,1] then,
+we can combine 2 and 1 to get 1, so the array converts to [1,1,1] then,
+we can combine 1 and 1 to get 0, so the array converts to [1], then that's the optimal value.
+
+Input: stones = [31,26,33,21,40]
+Output: 5
+"""
+class Solution:
+    def lastStoneWeightII(self, stones: List[int]) -> int:
+        # solved using memoization
+        # concept of bounded knapsack
+
+        # caching
+        dp = {}
+
+        stoneSum = sum(stones)
+        target = math.ceil(stoneSum/2) 
+
+        def f(idx, total):
+            if total >= target or idx == len(stones):
+                return abs(total - (stoneSum - total))
+
+            if (idx, total) in dp:
+                return dp[(idx, total)]
+
+            # pick
+            pick = f(idx + 1, total + stones[idx])
+
+            # not pick
+            not_pick = f(idx + 1, total)
+
+            dp[(idx, total)] = min(pick, not_pick)
+
+            return dp[(idx, total)]
+
+        return f(0, 0)
