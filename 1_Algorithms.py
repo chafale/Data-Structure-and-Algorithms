@@ -4,10 +4,14 @@ import math
 from typing import Optional
 import collections
 
-# Kadane's Algorithm
+# 1. Kadane's Algorithm
 """
 https://leetcode.com/problems/maximum-subarray/
 Given an integer array nums, find the subarray with the largest sum, and return its sum.
+
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+Explanation: The subarray [4,-1,2,1] has the largest sum 6.
 """
 def maximumSubarray(a):
     max_g = a[0]
@@ -21,7 +25,13 @@ def maximumSubarray(a):
     return max_g
 
 
-# Binary Search
+
+
+
+# 2. Binary Search
+"""
+... ... ... ... ... ... ... ... ... ...
+"""
 class Solution:
     def search(self, nums: List[int], target: int) -> bool:
         l ,r = 0, len(nums) - 1
@@ -37,6 +47,8 @@ class Solution:
 """
 Time Complexity : O(log n)
 """
+
+
 
 
 # 3. Merge Sort
@@ -100,6 +112,8 @@ pseudo code:
 # 4. Dutch Nation Flag Problem
 """
 https://leetcode.com/problems/sort-colors/
+Input: nums = [2,0,2,1,1,0]
+Output: [0,0,1,1,2,2]
 """
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
