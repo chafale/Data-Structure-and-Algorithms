@@ -425,7 +425,7 @@ class Solution:
 
         for num in nums:
             # check if it is the start of the sequence
-            if (num -1) not in numSet:
+            if (num - 1) not in numSet:
                 # calculate length of the sequence
                 length = 0
                 while (num + length) in numSet:
