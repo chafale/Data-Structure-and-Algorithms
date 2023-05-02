@@ -222,3 +222,49 @@ class Solution:
             if leftMin < 0:  # required because -> s = ( * ) (
                 leftMin = 0
         return leftMin == 0
+    
+
+
+
+# 8. Break a Palindrome
+"""
+https://leetcode.com/problems/break-a-palindrome/
+Given a palindromic string of lowercase English letters palindrome, replace exactly one character 
+with any lowercase English letter so that the resulting string is not a palindrome and that it is the 
+lexicographically smallest one possible.
+
+Input: palindrome = "abccba"
+Output: "aaccba"
+Explanation: There are many ways to make "abccba" not a palindrome, such as "zbccba", "aaccba", and "abacba".
+Of all the ways, "aaccba" is the lexicographically smallest.
+
+Input: palindrome = "a"
+Output: ""
+Explanation: There is no way to replace a single character to make "a" not a palindrome, so return an empty 
+string.
+"""
+# Algorithm:
+"""
+Algorithm:
+1. If the length of the string is 1, return an empty string since we cannot create 
+    a non-palindromic string in this case.
+2. Iterate over the string from left to the middle of the string: if the character is not `a`, 
+    change it to `a` and return the string.
+3. If we traversed over the whole left part of the string and still haven't got a non-palindromic 
+    string, it means the string has only a's. Hence, change the last character to `b` and return 
+    the obtained string.
+"""
+class Solution:
+    def breakPalindrome(self, palindrome: str) -> str:
+        if len(palindrome) == 1:
+            return ""
+
+        res = [char for char in palindrome]
+        # only traverse to middle of array
+        for i in range(len(palindrome)//2):
+            if res[i] != "a":
+                res[i] = "a"
+                return "".join(res)
+
+        res[-1] = "b"
+        return "".join(res)

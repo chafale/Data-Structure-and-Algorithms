@@ -96,10 +96,14 @@ class Solution:
 
 
 
+
 # Basic 3 - Inplace merge two Linklist
-# merge two sorted linked lists [Problem 21]
+# merge two sorted linked lists [Problem 2]
 # merge 1->2->3->4 and 6->5->4 into 1->6->2->5->3->4
-first, second = head, prev
+head1 = ListNode("1->2->3->4")
+head2 = ListNode("6->5->4")
+# here second will always points to shorter list
+first, second = head1, head2
 while second.next:
     tmp = first.next
     first.next = second
@@ -177,9 +181,9 @@ https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 # Solution : 
 # we could use two pointers. 
 # The first pointer advances the list by n+1 steps from the beginning,
-#  while the second pointer starts from the beginning of the list. 
+# while the second pointer starts from the beginning of the list. 
 # 
-# Now, both pointers are exactly separated by nnn nodes apart. 
+# Now, both pointers are exactly separated by `n` nodes apart. 
 # We maintain this constant gap by advancing both pointers together 
 # until the first pointer arrives past the last node. 
 # The second pointer will be pointing at the n-th node counting from the last. 
@@ -229,16 +233,27 @@ If there is no cycle, return null.
 
 # Problem 6 - Find the Duplicate Number
 """
+* * Improtant problem -- considered to be hard
 https://leetcode.com/problems/find-the-duplicate-number/
 Given an array of integers nums containing n + 1 integers where each integer 
 is in the range [1, n] inclusive.
 
 There is only one repeated number in nums, return this repeated number.
+
+Example 1:
+Input: nums = [1,3,4,2,2]
+Output: 2
+
+Example 2:
+Input: nums = [3,1,3,4,2]
+Output: 3
+
+https://www.youtube.com/watch?v=wjYnzkAhcNk
 """
-# Solution : think nums not as values but as pointers to index od the array.
+# Solution : think nums not as values but as pointers to index of the array.
 # so it will create a graph having cycle
-# Therefore first we will apply floyd's algo to find start point in the cycle and 
-# return the start point
+# Therefore first we will apply floyd's algo (slow-fast pointer algo) to find 
+# start point of the cycle of LL and return the start point
 class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
         slow = fast = 0
@@ -372,3 +387,53 @@ class Solution:
 
 
 
+# 11. Reverse Nodes in k-Group
+"""
+https://leetcode.com/problems/reverse-nodes-in-k-group
+Given the head of a linked list, reverse the nodes of the list k at a time, 
+and return the modified list.
+
+Input: head = [1,2,3,4,5], k = 2
+Output: [2,1,4,3,5]
+
+Input: head = [1,2,3,4,5], k = 3
+Output: [3,2,1,4,5]
+"""
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        
+        def findKth(curr, k):
+            while curr and k > 0:
+                curr = curr.next
+                k -= 1
+            return curr
+
+        dummy = ListNode(-1, head)
+        grpPrev = dummy
+
+        while True:
+            kth = findKth(grpPrev, k)
+            if not kth:
+                break
+
+            grpNext = kth.next
+
+            # reverse the linkedList
+            prev, curr = grpNext, grpPrev.next
+            while curr != grpNext:
+                tmp = curr.next
+                curr.next = prev
+                prev = curr
+                curr = tmp
+
+            # * * this portion is tricky
+            tmp = grpPrev.next
+            grpPrev.next = kth
+            grpPrev = tmp
+
+        return dummy.next

@@ -27,11 +27,11 @@ Window position                Max
  1  3  -1  -3 [5  3  6] 7       6
  1  3  -1  -3  5 [3  6  7]      7
 """
-# Uses the concept of monotonic queue
+# Uses the concept of monotonic decreasing queue
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         result = []
-        q = deque()
+        q = deque()  # q will store indices
 
         l, r = 0, 0
         while r < len(nums):

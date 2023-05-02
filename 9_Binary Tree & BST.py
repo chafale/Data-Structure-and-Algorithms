@@ -577,6 +577,14 @@ class Solution:
 * * Good question
 https://leetcode.com/problems/maximum-width-of-binary-tree/
 Given the root of a binary tree, return the maximum width of the given tree.
+
+Input: root = [1,3,2,5,3,null,9]
+Output: 4
+Explanation: The maximum width exists in the third level with length 4 (5,3,null,9).
+
+Input: root = [1,3,2,5,null,null,9,6,null,7]
+Output: 7
+Explanation: The maximum width exists in the fourth level with length 7 (6,null,null,null,null,null,7).
 """
 # Solution :  
 # apply level order but in the following fasion
