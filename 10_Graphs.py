@@ -82,7 +82,7 @@ def detectCycleBFS(start_node) -> bool:
     visited = set()
     queue = []
 
-    queue.append((start_node, -1))
+    queue.append((start_node, -1)) # <node, parent>
     visited.add(start_node)
 
     while queue:
@@ -244,7 +244,7 @@ def detectBipartiteBFS(start_node):
 
     while queue:
         base = queue.pop(0)
-        base_color = visited[base]
+        base_color = visited[base] # visited has node : color
 
         for neighbour in odd_graph_cycle[base]:
             if neighbour not in visited:
@@ -402,7 +402,7 @@ we can convert a un-directed graph to directed graph by showing two uni-directio
 """
 # Algorithm :
 #   Relax all the edges n-1 times
-#   Relaxation : u -> v & edge wt = w then
+#   Relaxation : u -> v & edge weight `wt` then
 #                if dist[u] + wt < dist[v]:
 #                      dist[v] = dist[u] + wt
 
@@ -525,6 +525,13 @@ class DisjointSet:
         # path compression
         self.parent[node] = self.find_parent(self.parent[node])
         return self.parent[node]
+
+        """
+        while self.parent[node] != node:
+            self.parent[node] = self.parent[self.parent[node]]
+            node = self.parent[node]
+        return node
+        """
 
     def union_by_rank(self, node1, node2) -> bool:
         p1 = self.find_parent(node1)
