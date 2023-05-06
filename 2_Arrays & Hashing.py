@@ -117,6 +117,7 @@ class Solution:
 
 # 4. First Missing Positive
 """
+* * Good question
 https://leetcode.com/problems/first-missing-positive/
 Given an unsorted integer array nums, return the smallest missing positive integer.
 
@@ -143,8 +144,8 @@ Output: 1
 #           if 'i' is in bound of the array index i.e 0 <= i < len(A):
 #               if A[i] is not negative:
 #                   A[i] *= -1 # make it negative
-#   3. then we will iterate through range [1 ... len(A)] and check it element is present
-#      to check if element is present go to index and check if integer present is negative
+#   3. then we will iterate through range [1 ... len(A)] and check if the element is present
+#      -- to check if element is present go to index and check if integer present is negative
 #       for i in range(1, len(A)+1):
 #           idx = i - 1
 #           if A[idx] > 0:

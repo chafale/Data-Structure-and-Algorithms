@@ -67,6 +67,10 @@ substring of s such that every character in t (including duplicates) is included
 If there is no such substring, return the empty string "".
 
 The testcases will be generated such that the answer is unique.
+
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
 """
 class Solution:
     def minWindow(self, s: str, t: str) -> str:

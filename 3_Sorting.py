@@ -6,7 +6,7 @@ import heapq
 import math
 
 
-# Problem 1 - Array With Elements Not Equal to Average of Neighbors
+# Problem 1 - Array With Elements Not Equal to Average of Neighbours
 """
 https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors/
 You are given a 0-indexed array nums of distinct integers. 
