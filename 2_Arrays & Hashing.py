@@ -608,3 +608,146 @@ class Solution:
                 count += -1
 
         return candidate
+    
+
+
+
+# 17. Subarray Sum Equals K
+"""
+https://leetcode.com/problems/subarray-sum-equals-k
+Given an array of integers nums and an integer k, return the total number of subarrays 
+whose sum equals to k.
+
+A subarray is a contiguous non-empty sequence of elements within an array.
+
+Input: nums = [1,1,1], k = 2
+Output: 2
+
+Input: nums = [1,2,3], k = 3
+Output: 2
+"""
+# Prefix map : <prefix, count>
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        prefixMap = {0 : 1}
+        currSum = 0
+        res = 0
+        for num in nums:
+            currSum += num
+            if currSum - k in prefixMap:
+                res += prefixMap[currSum - k]
+            prefixMap[currSum] = prefixMap.get(currSum, 0) + 1
+        return res
+    
+
+
+
+# 18. Pairs of Songs With Total Durations Divisible by 60
+"""
+* Rare problem -- can skip in revision
+You are given a list of songs where the ith song has a duration of time[i] seconds.
+
+Return the number of pairs of songs for which their total duration in seconds is divisible by 60. 
+Formally, we want the number of indices i, j such that i < j with (time[i] + time[j]) % 60 == 0.
+
+Input: time = [30,20,150,100,40]
+Output: 3
+Explanation: Three pairs have a total duration divisible by 60:
+(time[0] = 30, time[2] = 150): total duration 180
+(time[1] = 20, time[3] = 100): total duration 120
+(time[1] = 20, time[4] = 40): total duration 60
+
+Input: time = [60,60,60]
+Output: 3
+Explanation: All three pairs have a total duration of 120, which is divisible by 60.
+"""
+class Solution:
+    def numPairsDivisibleBy60(self, time: List[int]) -> int:
+        hashmap = collections.defaultdict(int)
+        res = 0
+        for t in time:
+            if t % 60 == 0:
+                res += hashmap[0]
+            else:
+                res += hashmap[60 - (t % 60)]
+            hashmap[t % 60] += 1
+        return res
+
+
+
+
+# 19. Search in Rotated Sorted Array
+"""
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+Given the array nums after the possible rotation and an integer target, return the index of target 
+if it is in nums, or -1 if it is not in nums.
+You must write an algorithm with O(log n) runtime complexity.
+
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+
+Input: nums = [4,5,6,7,0,1,2], target = 3
+Output: -1
+"""
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        l, r = 0, len(nums) - 1
+
+        while l <= r:
+            mid = (l + r) // 2
+            if target == nums[mid]:
+                return mid
+
+            # left sorted portion
+            if nums[l] <= nums[mid]:
+                if target > nums[mid] or target < nums[l]:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+            # right sorted portion
+            else:
+                if target < nums[mid] or target > nums[r]:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+        return -1
+
+
+
+
+# 20. Find Minimum in Rotated Sorted Array
+"""
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/
+Given the sorted rotated array nums of unique elements, return the minimum element of this array.
+You must write an algorithm that runs in O(log n) time.
+
+Input: nums = [3,4,5,1,2]
+Output: 1
+Explanation: The original array was [1,2,3,4,5] rotated 3 times.
+
+Input: nums = [4,5,6,7,0,1,2]
+Output: 0
+Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4 times.
+
+Input: nums = [11,13,15,17]
+Output: 11
+Explanation: The original array was [11,13,15,17] and it was rotated 4 times. 
+"""
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        start , end = 0 ,len(nums) - 1 
+        curr_min = float("inf")
+        
+        while start  <  end :
+            mid = (start + end ) // 2
+            curr_min = min(curr_min,nums[mid])
+            
+            # right has the min 
+            if nums[mid] > nums[end]:
+                start = mid + 1
+                
+            # left has the  min 
+            else:
+                end = mid - 1 
+                
+        return min(curr_min,nums[start])

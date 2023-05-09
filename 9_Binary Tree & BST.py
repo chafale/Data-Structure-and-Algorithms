@@ -1262,6 +1262,191 @@ def f(l, r):
     return min_sum
 
 
+
+
+# Problem 32 - All Nodes Distance K in Binary Tree
+"""
+https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree
+Given the root of a binary tree, the value of a target node target, and an integer k, 
+return an array of the values of all nodes that have a distance k from the target node.
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, k = 2
+Output: [7,4,1]
+Explanation: The nodes that are a distance 2 from the target node (with value 5) have 
+values 7, 4, and 1.
+
+Input: root = [1], target = 1, k = 3
+Output: []
+"""
+# Approach : I have converted a tree to graph and have solve the problem using bfs
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        adj_list = collections.defaultdict(list)
+
+        def dfs(node):
+            if not node:
+                return
+
+            if node.left:
+                adj_list[node].append(node.left)
+                adj_list[node.left].append(node)
+                dfs(node.left)
+
+            if node.right:
+                adj_list[node].append(node.right)
+                adj_list[node.right].append(node)
+                dfs(node.right)
+
+        dfs(root)
+
+        res = []
+
+        visited = set()
+        q = collections.deque([(target, 0)])
+
+        visited.add(target)
+        while q:
+            tmp, level = q.popleft()
+            if level == k:
+                res.append(tmp.val)
+
+            for neighbour in adj_list[tmp]:
+                if neighbour not in visited and level + 1 <= k:
+                    q.append((neighbour, level + 1))
+                    visited.add(neighbour)
+
+        return res
+
+
+
+
+
+# 33. Path Sum I
+"""
+https://leetcode.com/problems/path-sum/description/
+Given the root of a binary tree and an integer targetSum, return true if 
+the tree has a root-to-leaf path such that adding up all the values along the path 
+equals targetSum.
+
+A leaf is a node with no children.
+
+Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+Output: true
+Explanation: The root-to-leaf path with the target sum is shown.
+"""
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        def dfs(node, pathSum):
+            if not node:
+                return False
+
+            pathSum -= node.val
+
+            if not node.left and not node.right:
+                return pathSum == 0
+
+            return dfs(node.left, pathSum) or dfs(node.right, pathSum)
+
+        return dfs(root, targetSum)
+    
+
+
+
+# 34. Path Sum II
+"""
+https://leetcode.com/problems/path-sum-ii/description/
+Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths 
+where the sum of the node values in the path equals targetSum. 
+Each path should be returned as a list of the node values, not node references.
+
+A root-to-leaf path is a path starting from the root and ending at any leaf node. 
+A leaf is a node with no children.
+
+Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+Output: [[5,4,11,2],[5,8,4,5]]
+Explanation: There are two paths whose sum equals targetSum:
+5 + 4 + 11 + 2 = 22
+5 + 8 + 4 + 5 = 22
+"""
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        res = []
+
+        def dfs(node, pathSum, path):
+            if not node:
+                return
+
+            path.append(node.val)
+
+            if not node.left and not node.right:
+                if pathSum == node.val:
+                    res.append(path[:])
+
+            dfs(node.left, pathSum - node.val, path)
+            dfs(node.right, pathSum - node.val, path)
+
+            path.pop()
+            
+        dfs(root, targetSum, [])
+        return res
+
+
+
+
+# 33. Path Sum III
+"""
+https://leetcode.com/problems/path-sum-iii/description/
+Given the root of a binary tree and an integer targetSum, return the number of paths where 
+the sum of the values along the path equals targetSum.
+
+The path does not need to start or end at the root or a leaf, but it must go downwards 
+(i.e., traveling only from parent nodes to child nodes).
+
+Input: root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
+Output: 3
+Explanation: The paths that sum to 8 are shown.
+"""
+# Pre-requisite to this problem is -- Subarray Sum Equals K
+# link : https://leetcode.com/problems/subarray-sum-equals-k
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+        prefixMap = collections.defaultdict(int)
+        prefixMap[0] = 1
+        res = 0
+
+        def dfs(node, currSum):
+            nonlocal res
+            if not node:
+                return
+
+            currSum += node.val
+
+            diff = currSum - targetSum
+            if diff in prefixMap:
+                res += prefixMap[diff]
+            
+            prefixMap[currSum] += 1
+
+            dfs(node.left, currSum)
+            dfs(node.right, currSum)
+
+            prefixMap[currSum] -= 1
+
+        dfs(root, 0)
+        return res
+
+
+
+
+
+
+
 # =======================================================================================================
 # =================================== BINARY SEARCH TREE PROBLEMS =======================================
 # =======================================================================================================
@@ -1339,6 +1524,39 @@ class Solution:
 # Problem 4 - Construct a BST from a preorder traversal
 
 # Problem 5 - Inorder Successor in BST
+"""
+https://leetcode.com/problems/inorder-successor-in-bst/
+Given the root of a binary search tree and a node p in it, return the in-order successor 
+of that node in the BST. If the given node has no in-order successor in the tree, 
+return null.
+
+The successor of a node p is the node with the smallest key greater than p.val.
+
+Input: root = [2,1,3], p = 1
+Output: 2
+Explanation: 1's in-order successor node is 2. Note that both p and the return value is of 
+TreeNode type.
+
+Input: root = [5,3,6,2,4,null,null,1], p = 6
+Output: null
+Explanation: There is no in-order successor of the current node, so the answer is null.
+"""
+class Solution:
+    def inorderSuccessor(self, root: TreeNode, p: TreeNode) -> Optional[TreeNode]:
+        successor = None
+        curr = root
+        while curr:
+            if p.val >= curr.val:
+                curr = curr.right
+            else:
+                successor = curr
+                curr = curr.left
+
+        return successor
+
+
+
+
 
 # Problem 6 - Convert Sorted Array to Binary Search Tree
 """

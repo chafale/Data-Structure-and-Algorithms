@@ -268,3 +268,194 @@ class Solution:
 
         res[-1] = "b"
         return "".join(res)
+    
+
+
+
+# 9. Interleaving String
+"""
+https://leetcode.com/problems/interleaving-string
+Given strings s1, s2, and s3, find whether s3 is formed by an interleaving of s1 and s2.
+The interleaving is s1 + t1 + s2 + t2 + s3 + t3 + ... or t1 + s1 + t2 + s2 + t3 + s3 + ...
+Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+Output: true
+Explanation: One way to obtain s3 is:
+Split s1 into s1 = "aa" + "bc" + "c", and s2 into s2 = "dbbc" + "a".
+Interleaving the two splits, we get "aa" + "dbbc" + "bc" + "a" + "c" = "aadbbcbcac".
+Since s3 can be obtained by interleaving s1 and s2, we return true.
+
+Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
+Output: false
+Explanation: Notice how it is impossible to interleave s2 with any other string to obtain s3.
+
+Input: s1 = "", s2 = "", s3 = ""
+Output: true
+"""
+# Approach 1 - Top down DP approach
+class Solution:
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        if len(s1) + len(s2) != len(s3):
+            return False
+
+        dp = {}
+        # here i -> s1 index; j -> s2 index
+        def dfs(i, j):
+            if i == len(s1) and j == len(s2):
+                return True
+
+            if (i, j) in dp:
+                return dp[(i, j)]
+
+            # pick ith char from s1
+            if i < len(s1) and s1[i] == s3[i+j] and dfs(i+1, j):
+                return True
+
+            # pick jth char from s2
+            if j < len(s2) and s2[j] == s3[i+j] and dfs(i, j+1):
+                return True
+
+            dp[(i, j)] = False
+
+            return False
+
+        return dfs(0, 0)
+    
+# Approach 2 - Bottom up approach
+
+class Solution:
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        if len(s1) + len(s2) != len(s3):
+            return False
+        
+        dp = [[False for _ in range(len(s2) + 1)] for _ in range(len(s1) + 1)]
+        dp[len(s1)][len(s2)] = True
+
+        for i in range(len(s1), -1, -1):
+            for j in range(len(s2), -1, -1):
+                ans = False
+                
+                # pick ith char from s1
+                if i < len(s1) and s1[i] == s3[i+j] and dp[i+1][j]:
+                    dp[i][j] = True
+
+                # pick jth char from s2
+                if j < len(s2) and s2[j] == s3[i+j] and dp[i][j+1]:
+                    dp[i][j] = True
+
+        return dp[0][0]
+    
+
+
+
+# 10. Longest Palindromic Substring
+"""
+Given a string s, return the longest palindromic substring in s.
+
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+
+Input: s = "cbbd"
+Output: "bb"
+"""
+# Approach : start from middle and expand  . . . 
+# video : https://www.youtube.com/watch?v=XYQecbcd6_c
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        res = ""
+        resLen = 0
+
+        for i in range(len(s)):
+            # odd length palindrome
+            l, r = i, i
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if (r - l + 1) > resLen:
+                    resLen = (r - l + 1)
+                    res = s[l : r + 1]
+                l -= 1
+                r += 1
+
+            # even length palindrome
+            l, r = i, i+1
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if (r - l + 1) > resLen:
+                    resLen = (r - l + 1)
+                    res = s[l : r + 1]
+                l -= 1
+                r += 1
+
+        return res
+    
+
+
+# 11. Palindromic Substrings
+"""
+https://leetcode.com/problems/palindromic-substrings/
+Given a string s, return the number of palindromic substrings in it.
+
+Input: s = "abc"
+Output: 3
+Explanation: Three palindromic strings: "a", "b", "c".
+
+Input: s = "aaa"
+Output: 6
+Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+"""
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        count = 0
+
+        for i in range(len(s)):
+            l, r = i, i
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                count += 1
+                l -= 1
+                r += 1
+
+            l, r = i, i+1
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                count += 1
+                l -= 1
+                r += 1
+
+        return count
+    
+
+
+
+# 12. Longest Substring with At Most Two Distinct Characters
+"""
+https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters
+Given a string s, return the length of the longest 
+substring that contains at most two distinct characters.
+Input: s = "eceba"
+Output: 3
+Explanation: The substring is "ece" which its length is 3.
+
+Input: s = "ccaabbb"
+Output: 5
+Explanation: The substring is "aabbb" which its length is 5.
+"""
+class Solution:
+    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
+        n = len(s)
+        if n < 3:
+            return n
+
+        l, r = 0, 0
+        hashMap = {}
+
+        max_len = 2
+
+        while r < len(s):
+            hashMap[s[r]] = r
+
+            if len(hashMap) == 3:
+                del_idx = min(hashMap.values())
+                del hashMap[s[del_idx]]
+                l = del_idx + 1
+
+            max_len = max((r - l + 1), max_len)
+            r += 1
+        
+        return max_len

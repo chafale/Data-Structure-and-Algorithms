@@ -272,3 +272,42 @@ class Solution:
             r += 1
 
         return max_profit 
+
+
+
+
+# 8. Subarray Product Less Than K
+"""
+https://leetcode.com/problems/subarray-product-less-than-k/
+Given an array of integers nums and an integer k, return the number of contiguous subarrays 
+where the product of all the elements in the subarray is strictly less than k.
+
+Input: nums = [10,5,2,6], k = 100
+Output: 8
+Explanation: The 8 subarrays that have product less than 100 are:
+[10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6]
+Note that [10, 5, 2] is not included as the product of 100 is not strictly less than k.
+"""
+class Solution:
+    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+        # using sliding window technique
+        l, r = 0, 0
+        prod = 1
+        count = 0
+        while r < len(nums):
+            prod = prod * nums[r]
+            
+            while l < len(nums) and prod >= k:
+                prod = prod / nums[l]
+                l += 1
+
+            if prod < k:
+                count += (r - l + 1)
+                
+            r += 1
+
+        return count
+    
+
+
+

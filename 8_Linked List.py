@@ -192,6 +192,24 @@ https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 # to the node's next next node. 
 
 """https://www.youtube.com/watch?v=XVuQxVej6y8&list=PLot-Xpze53leU0Ec0VkBhnf4npMRFiNcB&index=8"""
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        dummy = ListNode(0, head)
+        left = dummy
+        right = head
+
+        while n > 0:
+            right = right.next
+            n -= 1
+
+        while right:
+            left = left.next
+            right = right.next
+
+        # delete
+        left.next = left.next.next
+        return dummy.next
+
 
 
 
@@ -436,4 +454,37 @@ class Solution:
             grpPrev.next = kth
             grpPrev = tmp
 
+        return dummy.next
+    
+
+
+
+# 12. Reverse the linklist - ii
+"""
+https://leetcode.com/problems/reverse-linked-list-ii/description/
+Given the head of a singly linked list and two integers left and right where left <= right, 
+reverse the nodes of the list from position left to position right, and return the reversed list.
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+"""
+class Solution:
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        dummy = ListNode(0, head)
+
+        # 1) reach node at position "left"
+        leftPrev, cur = dummy, head
+        for i in range(left - 1):
+            leftPrev, cur = cur, cur.next
+
+        # Now cur="left", leftPrev="node before left"
+        # 2) reverse from left to right
+        prev = None
+        for i in range(right - left + 1):
+            tmpNext = cur.next
+            cur.next = prev
+            prev, cur = cur, tmpNext
+
+        # 3) Update pointers
+        leftPrev.next.next = cur  # cur is node after "right"
+        leftPrev.next = prev  # prev is "right"
         return dummy.next
