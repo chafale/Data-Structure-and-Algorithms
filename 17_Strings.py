@@ -473,7 +473,7 @@ Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
 """
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        res = collections.defaultdict(list)
+        res = defaultdict(list)
         for word in strs:
             count = [0] * 26
             for char in word:
