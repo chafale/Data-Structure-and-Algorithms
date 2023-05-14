@@ -459,3 +459,24 @@ class Solution:
             r += 1
         
         return max_len
+    
+
+
+
+# 13. Group Anagrams
+"""
+https://leetcode.com/problems/group-anagrams/
+Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+"""
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        res = collections.defaultdict(list)
+        for word in strs:
+            count = [0] * 26
+            for char in word:
+                count[ord(char) - ord('a')] += 1
+            res[tuple(count)].append(word)
+        return res.values()

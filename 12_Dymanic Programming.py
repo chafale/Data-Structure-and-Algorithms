@@ -415,7 +415,7 @@ skipping for now
 
 # Problem - 13 Subset Sum Equals to Target
 """
-* * Note: its subset and not subarray and subsets == subsequences
+* * Note: its subset, not subarray and subsets == subsequences
 
 You are given an array 'ARR' of 'N' positive integers and an integer 'K'. 
 Your task is to check if there exists a subset in 'ARR' with a sum equal to 'K'.
@@ -618,6 +618,8 @@ Explanation: There are 5 ways to assign symbols to make the sum of nums be targe
 """
 Given weights and values of N items, put these items in a knapsack of capacity W 
 to get the maximum total value in the knapsack.
+
+Note: weights can be chosen only once
 """
 W = 10
 wt = [1, 2, 4, 5]

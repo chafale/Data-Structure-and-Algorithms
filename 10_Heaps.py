@@ -54,3 +54,59 @@ class Solution:
             k -= 1
 
         return res
+    
+
+
+
+# 2. Find Median from Data Stream
+"""
+https://leetcode.com/problems/find-median-from-data-stream/description/
+Implement the MedianFinder class:
+
+MedianFinder() initializes the MedianFinder object.
+1. void addNum(int num) adds the integer num from the data stream to the data structure.
+2. double findMedian() returns the median of all elements so far. Answers within 10-5 of the 
+   actual answer will be accepted.
+
+Input
+["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
+[[], [1], [2], [], [3], []]
+Output
+[null, null, null, 1.5, null, 2.0]
+
+Explanation
+MedianFinder medianFinder = new MedianFinder();
+medianFinder.addNum(1);    // arr = [1]
+medianFinder.addNum(2);    // arr = [1, 2]
+medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
+medianFinder.addNum(3);    // arr[1, 2, 3]
+medianFinder.findMedian(); // return 2.0
+""" 
+class MedianFinder:
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        # two heaps, large, small, minheap, maxheap
+        # heaps should be equal size
+        self.small, self.large = [], []  # maxHeap, minHeap (python default)
+
+    def addNum(self, num: int) -> None:
+        if self.large and num > self.large[0]:
+            heapq.heappush(self.large, num)
+        else:
+            heapq.heappush(self.small, -1 * num)
+
+        if len(self.small) > len(self.large) + 1:
+            val = -1 * heapq.heappop(self.small)
+            heapq.heappush(self.large, val)
+        if len(self.large) > len(self.small) + 1:
+            val = heapq.heappop(self.large)
+            heapq.heappush(self.small, -1 * val)
+
+    def findMedian(self) -> float:
+        if len(self.small) > len(self.large):
+            return -1 * self.small[0]
+        elif len(self.large) > len(self.small):
+            return self.large[0]
+        return (-1 * self.small[0] + self.large[0]) / 2

@@ -302,3 +302,163 @@ class TimeMap:
             else:
                 r = m - 1
         return res
+    
+
+
+
+# 8. LFU Cache
+"""
+https://leetcode.com/problems/lfu-cache
+Design and implement a data structure for a Least Frequently Used (LFU) cache.
+Implement the LFUCache class:
+1. LFUCache(int capacity) Initializes the object with the capacity of the data structure.
+2. int get(int key) Gets the value of the key if the key exists in the cache. Otherwise, returns -1.
+3. void put(int key, int value) Update the value of the key if present, or inserts the key if not 
+   already present. When the cache reaches its capacity, it should invalidate and remove the least 
+   frequently used key before inserting a new item. For this problem, when there is a tie (i.e., two 
+   or more keys with the same frequency), the least recently used key would be invalidated.
+
+The functions get and put must each run in O(1) average time complexity.
+"""
+import collections
+
+class Node:
+    def __init__(self, key, val):
+        self.key = key
+        self.val = val
+        self.freq = 1
+        self.prev = self.next = None
+
+class DLinkedList:
+    def __init__(self):
+        self._sentinel = Node(None, None) # dummy node
+        self._sentinel.next = self._sentinel.prev = self._sentinel
+        self._size = 0
+    
+    def __len__(self):
+        return self._size
+    
+    def append(self, node):
+        node.next = self._sentinel.next
+        node.prev = self._sentinel
+        node.next.prev = node
+        self._sentinel.next = node
+        self._size += 1
+    
+    def pop(self, node=None):
+        if self._size == 0:
+            return
+        
+        if not node:
+            node = self._sentinel.prev
+
+        node.prev.next = node.next
+        node.next.prev = node.prev
+        self._size -= 1
+        
+        return node
+        
+class LFUCache:
+    def __init__(self, capacity):
+        self._size = 0
+        self._capacity = capacity
+        
+        self._node = dict() # key: Node
+        self._freq = collections.defaultdict(DLinkedList)
+        self._minfreq = 0
+        
+        
+    def _update(self, node):
+        freq = node.freq
+        
+        self._freq[freq].pop(node)
+        if self._minfreq == freq and not self._freq[freq]:
+            self._minfreq += 1
+        
+        node.freq += 1
+        freq = node.freq
+        self._freq[freq].append(node)
+    
+    def get(self, key):
+        if key not in self._node:
+            return -1
+        
+        node = self._node[key]
+        self._update(node)
+        return node.val
+
+    def put(self, key, value):
+        if self._capacity == 0:
+            return
+        
+        if key in self._node:
+            node = self._node[key]
+            self._update(node)
+            node.val = value
+        else:
+            if self._size == self._capacity:
+                node = self._freq[self._minfreq].pop()
+                del self._node[node.key]
+                self._size -= 1
+                
+            node = Node(key, value)
+            self._node[key] = node
+            self._freq[1].append(node)
+            self._minfreq = 1
+            self._size += 1
+
+
+
+
+# 9. Find Median from Data Stream
+"""
+https://leetcode.com/problems/find-median-from-data-stream/description/
+Implement the MedianFinder class:
+
+MedianFinder() initializes the MedianFinder object.
+1. void addNum(int num) adds the integer num from the data stream to the data structure.
+2. double findMedian() returns the median of all elements so far. Answers within 10-5 of the 
+   actual answer will be accepted.
+
+Input
+["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
+[[], [1], [2], [], [3], []]
+Output
+[null, null, null, 1.5, null, 2.0]
+
+Explanation
+MedianFinder medianFinder = new MedianFinder();
+medianFinder.addNum(1);    // arr = [1]
+medianFinder.addNum(2);    // arr = [1, 2]
+medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
+medianFinder.addNum(3);    // arr[1, 2, 3]
+medianFinder.findMedian(); // return 2.0
+""" 
+class MedianFinder:
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        # two heaps, large, small, minheap, maxheap
+        # heaps should be equal size
+        self.small, self.large = [], []  # maxHeap, minHeap (python default)
+
+    def addNum(self, num: int) -> None:
+        if self.large and num > self.large[0]:
+            heapq.heappush(self.large, num)
+        else:
+            heapq.heappush(self.small, -1 * num)
+
+        if len(self.small) > len(self.large) + 1:
+            val = -1 * heapq.heappop(self.small)
+            heapq.heappush(self.large, val)
+        if len(self.large) > len(self.small) + 1:
+            val = heapq.heappop(self.large)
+            heapq.heappush(self.small, -1 * val)
+
+    def findMedian(self) -> float:
+        if len(self.small) > len(self.large):
+            return -1 * self.small[0]
+        elif len(self.large) > len(self.small):
+            return self.large[0]
+        return (-1 * self.small[0] + self.large[0]) / 2

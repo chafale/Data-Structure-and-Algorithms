@@ -1408,6 +1408,7 @@ Explanation: The paths that sum to 8 are shown.
 """
 # Pre-requisite to this problem is -- Subarray Sum Equals K
 # link : https://leetcode.com/problems/subarray-sum-equals-k
+
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1477,6 +1478,7 @@ Output: 3
 
 # Problem 2 - Validate Binary Search Tree
 """
+* * Good Problem
 https://leetcode.com/problems/validate-binary-search-tree/
 Given the root of a binary tree, determine if it is a valid binary search tree (BST).
 
@@ -1525,6 +1527,7 @@ class Solution:
 
 # Problem 5 - Inorder Successor in BST
 """
+* * Good Problem
 https://leetcode.com/problems/inorder-successor-in-bst/
 Given the root of a binary search tree and a node p in it, return the in-order successor 
 of that node in the BST. If the given node has no in-order successor in the tree, 
@@ -1541,8 +1544,11 @@ Input: root = [5,3,6,2,4,null,null,1], p = 6
 Output: null
 Explanation: There is no in-order successor of the current node, so the answer is null.
 """
+# we just need to find next val greater than p.val
+# we will use Binary Search since tree is BST
 class Solution:
     def inorderSuccessor(self, root: TreeNode, p: TreeNode) -> Optional[TreeNode]:
+        # iteration
         successor = None
         curr = root
         while curr:
@@ -1552,6 +1558,25 @@ class Solution:
                 successor = curr
                 curr = curr.left
 
+        return successor
+
+# using recursion
+class Solution:
+    def inorderSuccessor(self, root: TreeNode, p: TreeNode) -> Optional[TreeNode]:
+        # recursion
+        successor = None
+        def dfs(node):
+            nonlocal successor
+            if not node:
+                return
+
+            if node.val <= p.val:
+                dfs(node.right)
+            else:
+                successor = node
+                dfs(node.left)
+
+        dfs(root)
         return successor
 
 
@@ -1736,6 +1761,7 @@ class Solution:
 
 # Problem 10 - Trim a Binary Search Tree
 """
+* * Good Problem
 https://leetcode.com/problems/trim-a-binary-search-tree/
 Given the root of a binary search tree and the lowest and highest boundaries as low and high, 
 trim the tree so that all its elements lies in [low, high].
@@ -1801,6 +1827,7 @@ class Solution:
 
 # Problem 12 - Convert BST to Greater Tree
 """
+* * Good Problem
 https://leetcode.com/problems/convert-bst-to-greater-tree/
 Given the root of a Binary Search Tree (BST), convert it to a Greater Tree 
 such that every key of the original BST is changed to the original key plus 
