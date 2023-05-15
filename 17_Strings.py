@@ -306,17 +306,19 @@ class Solution:
             if (i, j) in dp:
                 return dp[(i, j)]
 
+            ans = False
+
             # pick ith char from s1
-            if i < len(s1) and s1[i] == s3[i+j] and dfs(i+1, j):
-                return True
+            if i < len(s1) and s1[i] == s3[i+j]:
+                ans = ans or dfs(i+1, j)
 
             # pick jth char from s2
-            if j < len(s2) and s2[j] == s3[i+j] and dfs(i, j+1):
-                return True
+            if j < len(s2) and s2[j] == s3[i+j]:
+                ans = ans or dfs(i, j+1)
 
-            dp[(i, j)] = False
+            dp[(i, j)] = ans
 
-            return False
+            return ans
 
         return dfs(0, 0)
     
@@ -480,3 +482,71 @@ class Solution:
                 count[ord(char) - ord('a')] += 1
             res[tuple(count)].append(word)
         return res.values()
+    
+
+
+
+# 14. Word Break
+"""
+https://leetcode.com/problems/word-break/
+Given a string s and a dictionary of strings wordDict, return true if s can be segmented 
+into a space-separated sequence of one or more dictionary words.
+
+Note that the same word in the dictionary may be reused multiple times in the segmentation.
+
+Input: s = "leetcode", wordDict = ["leet","code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+
+Input: s = "applepenapple", wordDict = ["apple","pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+Note that you are allowed to reuse a dictionary word.
+"""
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        dp = [False] * (len(s) + 1)
+        dp[len(s)] = True
+
+        for i in range(len(s)-1, -1, -1):
+            for w in wordDict:
+                if (i + len(w)) <= len(s) and s[i:i+len(w)] == w:
+                    dp[i] = dp[i + len(w)]
+                if dp[i]:
+                    break
+
+        return dp[0]
+    
+
+
+
+# 15. Decode String
+"""
+https://leetcode.com/problems/decode-string/
+Given an encoded string, return its decoded string.
+Input: s = "3[a]2[bc]"
+Output: "aaabcbc"
+
+Input: s = "3[a2[c]]"
+Output: "accaccacc"
+"""
+class Solution:
+    def decodeString(self, s: str) -> str:
+        stack = []
+
+        for char in s:
+            if char is not "]":
+                stack.append(char)
+            else:
+                sub_str = ""
+                while stack[-1] is not "[":
+                    sub_str = stack.pop() + sub_str
+                stack.pop()
+
+                multiplier = ""
+                while stack and stack[-1].isdigit():
+                    multiplier = stack.pop() + multiplier
+
+                stack.append(int(multiplier) * sub_str)
+
+        return "".join(stack)

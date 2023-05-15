@@ -409,6 +409,7 @@ class Solution:
 
 # 11. Reverse Nodes in k-Group
 """
+* * Good Problem -- Hard difficulty
 https://leetcode.com/problems/reverse-nodes-in-k-group
 Given the head of a linked list, reverse the nodes of the list k at a time, 
 and return the modified list.

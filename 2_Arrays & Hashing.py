@@ -740,7 +740,7 @@ class Solution:
         
         while start  <  end :
             mid = (start + end ) // 2
-            curr_min = min(curr_min,nums[mid])
+            curr_min = min(curr_min, nums[mid])
             
             # right has the min 
             if nums[mid] > nums[end]:

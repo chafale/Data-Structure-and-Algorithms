@@ -146,9 +146,9 @@ class Solution:
 
         while l < r:
             res = max(res, min(height[l], height[r]) * (r - l))
-            if height[l] < height[r]:
+            if height[l] <= height[r]:
                 l += 1
-            elif height[r] <= height[l]:
+            else:
                 r -= 1
         return res
 
@@ -233,10 +233,13 @@ class Solution:
             # Skip positive integers
             if a > 0:
                 break
-
+            
+            # if the number is same as previous skip the current elem as we don't 
+            # want duplicate
             if i > 0 and a == nums[i - 1]:
                 continue
-
+            
+            # Below code is two pointer
             l, r = i + 1, len(nums) - 1
             while l < r:
                 threeSum = a + nums[l] + nums[r]
