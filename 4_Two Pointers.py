@@ -227,13 +227,11 @@ Output: [[-1,-1,2],[-1,0,1]]
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         res = []
+
+        # sort the num array
         nums.sort()
 
-        for i, a in enumerate(nums):
-            # Skip positive integers
-            if a > 0:
-                break
-            
+        for i, a in enumerate(nums):           
             # if the number is same as previous skip the current elem as we don't 
             # want duplicate
             if i > 0 and a == nums[i - 1]:
@@ -250,6 +248,7 @@ class Solution:
                 else:
                     res.append([a, nums[l], nums[r]])
                     l += 1
+                    r -= 1
                     # this is done to remove duplicates
                     while nums[l] == nums[l - 1] and l < r:
                         l += 1
@@ -369,7 +368,7 @@ class Solution:
         while l < r:
             if s[l] != s[r]:
                 skipL, skipR = s[l+1 : r+1], s[l:r]
-                return (skipL == skipL[::-1] or skipR == skipR[::-1])
+                return (skipL == skipL[::-1] or skipR == skipR[::-1]) # code to check remaining string is palindrome
             l += 1
             r -= 1
         

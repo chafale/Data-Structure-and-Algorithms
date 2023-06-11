@@ -6,7 +6,7 @@ import heapq
 import math
 
 
-# Problem 1 - Array With Elements Not Equal to Average of Neighbours
+# 1. Array With Elements Not Equal to Average of Neighbours
 """
 https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors/
 You are given a 0-indexed array nums of distinct integers. 
@@ -56,8 +56,9 @@ class Solution:
 
 
 
-# Problem 2 - Rotate Array
+# 2.  Rotate Array
 """
+https://leetcode.com/problems/rotate-array/
 Given an integer array nums, rotate the array to the right by k steps, where k is non-negative.
 Input: nums = [1,2,3,4,5,6,7], k = 3
 Output: [5,6,7,1,2,3,4]
@@ -92,7 +93,7 @@ class Solution:
 
 
 
-# Problem 3 - Number of Subsequences That Satisfy the Given Sum Condition
+# 3. Number of Subsequences That Satisfy the Given Sum Condition
 """
 https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
 You are given an array of integers nums and an integer target.
@@ -124,3 +125,78 @@ def numSubseq(self, A, target):
 
 
 
+# 4. Search in Rotated Sorted Array
+"""
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+Given the array nums after the possible rotation and an integer target, return the index of target 
+if it is in nums, or -1 if it is not in nums.
+You must write an algorithm with O(log n) runtime complexity.
+
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+
+Input: nums = [4,5,6,7,0,1,2], target = 3
+Output: -1
+"""
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        l, r = 0, len(nums) - 1
+
+        while l <= r:
+            mid = (l + r) // 2
+            if target == nums[mid]:
+                return mid
+
+            # left sorted portion
+            if nums[l] <= nums[mid]:
+                if target > nums[mid] or target < nums[l]:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+            # right sorted portion
+            else:
+                if target < nums[mid] or target > nums[r]:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+        return -1
+
+
+
+
+# 5. Find Minimum in Rotated Sorted Array
+"""
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/
+Given the sorted rotated array nums of unique elements, return the minimum element of this array.
+You must write an algorithm that runs in O(log n) time.
+
+Input: nums = [3,4,5,1,2]
+Output: 1
+Explanation: The original array was [1,2,3,4,5] rotated 3 times.
+
+Input: nums = [4,5,6,7,0,1,2]
+Output: 0
+Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4 times.
+
+Input: nums = [11,13,15,17]
+Output: 11
+Explanation: The original array was [11,13,15,17] and it was rotated 4 times. 
+"""
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        start , end = 0 ,len(nums) - 1 
+        curr_min = float("inf")
+        
+        while start  <  end :
+            mid = (start + end ) // 2
+            curr_min = min(curr_min, nums[mid])
+            
+            # right has the min 
+            if nums[mid] > nums[end]:
+                start = mid + 1
+                
+            # left has the  min 
+            else:
+                end = mid - 1 
+                
+        return min(curr_min,nums[start])

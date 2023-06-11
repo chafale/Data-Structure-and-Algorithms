@@ -568,3 +568,45 @@ class MinStack:
 
     def getMin(self) -> int:
         return self.minStack[-1]
+
+
+
+
+# 16. Basic Calculator II
+"""
+https://leetcode.com/problems/basic-calculator-ii
+Given a string s which represents an expression, evaluate this expression and return its value. 
+
+Input: s = "3+2*2"
+Output: 7
+
+Input: s = " 3/2 "
+Output: 1
+"""
+class Solution:
+    def calculate(self, s: str) -> int:
+        operator = {"+", "-", "*", "/"}
+
+        stack = []
+        prevOperator = "+"
+
+        i = 0
+        currNumber = 0
+        while i < len(s):
+            if s[i].isdigit():
+                currNumber = currNumber * 10 + int(s[i])
+
+            if s[i] in operator or i == len(s) - 1:
+                if prevOperator == "+":
+                    stack.append(currNumber)
+                elif prevOperator == "-":
+                    stack.append(-1 * currNumber)
+                elif prevOperator == "*":
+                    stack.append(stack.pop() * currNumber)
+                else:
+                    stack.append(int(stack.pop()/currNumber))
+                currNumber = 0
+                prevOperator = s[i]
+            i += 1
+
+        return sum(stack)

@@ -168,8 +168,8 @@ class Solution:
                 elif A[val - 1] == 0:
                     A[val - 1] = -1 * (len(A) + 1)
         
-        for i in range( 1, len(A)+ 1):
-            if A[i -1] >= 0:
+        for i in range(1, len(A) + 1):
+            if A[i - 1] >= 0:
                 return i
         
         return len(A) + 1
@@ -227,7 +227,7 @@ class Solution:
 
 # 6. Good SubArray
 """
-* * Good
+* * Good Problem
 https://leetcode.com/problems/continuous-subarray-sum/
 Given an integer array nums and an integer k, return true if nums has a 
 good subarray or false otherwise.
@@ -257,8 +257,8 @@ Explanation: [23, 2, 6, 4, 7] is an continuous subarray of size 5 whose elements
 # one more thing we will initially add pair <0, -1> to hashmap to handle the edge cases 
 
 
-#We are basically storing sum%k and storing it in the hashmap and checking it.
-#Math logic is that the overall sum will get cancelled out because of modulo
+# We are basically storing sum%k and storing it in the hashmap and checking it.
+# Math logic is that the overall sum will get cancelled out because of modulo
 
 class Solution:
     def checkSubarraySum(self, nums: List[int], k: int) -> bool:
@@ -281,6 +281,7 @@ class Solution:
 
 # 7. Largest Number
 """
+* * Good
 https://leetcode.com/problems/largest-number/
 Given a list of non-negative integers nums, arrange them such that they form the 
 largest number and return it.
@@ -313,6 +314,7 @@ class Solution:
 
 # 8. Wiggle Sort
 """
+* * Good
 https://leetcode.com/problems/wiggle-sort/
 Given an integer array nums, reorder it such that nums[0] <= nums[1] >= nums[2] <= nums[3]....
 
@@ -364,6 +366,7 @@ class Solution:
 
 # 10. Sort Colors - Dutch National Flag Problem
 """
+* * Good
 https://leetcode.com/problems/sort-colors/
 Given an array nums with n objects colored red, white, or blue, sort them in-place so 
 that objects of the same color are adjacent, with the colors in the order red, white, and blue.
@@ -421,9 +424,10 @@ Output: 9
 # Solution : https://www.youtube.com/watch?v=P6RZZMu_maU
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
+        # add nums to set
         numSet = set(nums)
-        longest = 0
 
+        longest = 0
         for num in nums:
             # check if it is the start of the sequence
             if (num - 1) not in numSet:
@@ -489,6 +493,7 @@ class Solution:
 
 # 13. Top K Frequent Elements
 """
+* * Good
 https://leetcode.com/problems/top-k-frequent-elements/
 Given an integer array nums and an integer k, return the k most frequent elements. 
 You may return the answer in any order.
@@ -522,6 +527,7 @@ class Solution:
 
 # 14. Maximum Number of Balloons
 """
+* * Good
 https://leetcode.com/problems/maximum-number-of-balloons/
 Given a string text, you want to use the characters of text to form as many instances of 
 the word "balloon" as possible.
@@ -544,12 +550,27 @@ class Solution:
         for c in balloon:
             res = min(res, countText[c] // balloon[c])
         return res
+    
+# (OR) the bottle-neck approach
+class Solution:
+    def maxNumberOfBalloons(self, text: str) -> int:
+        balloonMap = {char: 0 for char in "balloon"}
+        for char in text:
+            if char in balloonMap:
+                balloonMap[char] += 1
+        
+        balloonMap["o"] = balloonMap["o"] // 2
+        balloonMap["l"] = balloonMap["l"] // 2
 
+        bottleneck = min(balloonMap.values())
+
+        return bottleneck
 
 
 
 # 15. Find Pivot Index
 """
+* * Good
 https://leetcode.com/problems/find-pivot-index/description/
 Given an array of integers nums, calculate the pivot index of this array.
 The pivot index is the index where the sum of all the numbers strictly to the 
@@ -582,6 +603,7 @@ class Solution(object):
 
 # 16. Majority Element - Boyer Moore Algorithm
 """
+* * Good
 https://leetcode.com/problems/majority-element/
 Given an array nums of size n, return the majority element.
 Follow-up: Could you solve the problem in linear time and in O(1) space?
@@ -676,86 +698,7 @@ class Solution:
 
 
 
-# 19. Search in Rotated Sorted Array
-"""
-https://leetcode.com/problems/search-in-rotated-sorted-array/
-Given the array nums after the possible rotation and an integer target, return the index of target 
-if it is in nums, or -1 if it is not in nums.
-You must write an algorithm with O(log n) runtime complexity.
-
-Input: nums = [4,5,6,7,0,1,2], target = 0
-Output: 4
-
-Input: nums = [4,5,6,7,0,1,2], target = 3
-Output: -1
-"""
-class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        l, r = 0, len(nums) - 1
-
-        while l <= r:
-            mid = (l + r) // 2
-            if target == nums[mid]:
-                return mid
-
-            # left sorted portion
-            if nums[l] <= nums[mid]:
-                if target > nums[mid] or target < nums[l]:
-                    l = mid + 1
-                else:
-                    r = mid - 1
-            # right sorted portion
-            else:
-                if target < nums[mid] or target > nums[r]:
-                    r = mid - 1
-                else:
-                    l = mid + 1
-        return -1
-
-
-
-
-# 20. Find Minimum in Rotated Sorted Array
-"""
-https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/
-Given the sorted rotated array nums of unique elements, return the minimum element of this array.
-You must write an algorithm that runs in O(log n) time.
-
-Input: nums = [3,4,5,1,2]
-Output: 1
-Explanation: The original array was [1,2,3,4,5] rotated 3 times.
-
-Input: nums = [4,5,6,7,0,1,2]
-Output: 0
-Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4 times.
-
-Input: nums = [11,13,15,17]
-Output: 11
-Explanation: The original array was [11,13,15,17] and it was rotated 4 times. 
-"""
-class Solution:
-    def findMin(self, nums: List[int]) -> int:
-        start , end = 0 ,len(nums) - 1 
-        curr_min = float("inf")
-        
-        while start  <  end :
-            mid = (start + end ) // 2
-            curr_min = min(curr_min, nums[mid])
-            
-            # right has the min 
-            if nums[mid] > nums[end]:
-                start = mid + 1
-                
-            # left has the  min 
-            else:
-                end = mid - 1 
-                
-        return min(curr_min,nums[start])
-
-
-
-
-# 21. Minimum Time to Make Rope Colorful
+# 19. Minimum Time to Make Rope Colorful
 """
 https://leetcode.com/problems/minimum-time-to-make-rope-colorful
 Alice has n balloons arranged on a rope. You are given a 0-indexed string colors where 
@@ -767,7 +710,19 @@ You are given a 0-indexed integer array neededTime where neededTime[i] is the ti
 that Bob needs to remove the ith balloon from the rope.
 
 Return the minimum time Bob needs to make the rope colorful.
+
+Input: colors = "abaac", neededTime = [1,2,3,4,5]
+Output: 3
+Explanation: In the above image, 'a' is blue, 'b' is red, and 'c' is green.
+Bob can remove the blue balloon at index 2. This takes 3 seconds.
+There are no longer two consecutive balloons of the same color. Total time = 3.
+
+Input: colors = "aabaa", neededTime = [1,2,3,4,1]
+Output: 2
+Explanation: Bob will remove the ballons at indices 0 and 4. Each ballon takes 1 second to remove.
+There are no longer two consecutive balloons of the same color. Total time = 1 + 1 = 2.
 """
+
 class Solution:
     def minCost(self, colors: str, neededTime: List[int]) -> int:
         timeCost = 0

@@ -610,3 +610,44 @@ class KthLargest:
             heapq.heappop(self.heap)
 
         return self.heap[0]
+
+
+
+
+# 13. Snapshot Array
+"""
+https://leetcode.com/problems/snapshot-array
+Implement a SnapshotArray that supports the following interface:
+1. SnapshotArray(int length) initializes an array-like data structure with the given length. 
+   Initially, each element equals 0.
+2. void set(index, val) sets the element at the given index to be equal to val.
+3. int snap() takes a snapshot of the array and returns the snap_id: the total 
+   number of times we called snap() minus 1.
+4. int get(index, snap_id) returns the value at the given index, at the time we took the snapshot
+   with the given snap_id
+
+Input: ["SnapshotArray","set","snap","set","get"]
+[[3],[0,5],[],[0,6],[0,0]]
+Output: [null,null,0,null,5]
+
+["SnapshotArray","set","snap","snap","snap","get","snap","snap","get"]
+[[1],[0,15],[],[],[],[0,2],[],[],[0,0]]
+Output : [null,null,0,1,2,15,3,4,15]
+"""
+class SnapshotArray:
+
+    def __init__(self, length: int):
+        self.snapArray = [[[0, 0]] for _ in range(length)]
+        self.snapId = 0
+
+    def set(self, index: int, val: int) -> None:
+        self.snapArray[index].append([self.snapId, val])
+
+    def snap(self) -> int:
+        self.snapId += 1
+        return self.snapId - 1
+
+    def get(self, index: int, snap_id: int) -> int:
+        # binary search on snapArray -- since it's sorted in snap_id
+        bisect_idx = bisect.bisect_right(self.snapArray[index], [snap_id, 10**9])
+        return self.snapArray[index][bisect_idx-1][1]
