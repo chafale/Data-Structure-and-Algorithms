@@ -305,8 +305,122 @@ class TimeMap:
     
 
 
+# 8. LRU Cache
+"""
+https://leetcode.com/problems/lru-cache/
+Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
 
-# 8. LFU Cache
+Implement the LRUCache class:
+1. LRUCache(int capacity) Initialize the LRU cache with positive size capacity.
+2. int get(int key) Return the value of the key if the key exists, otherwise return -1.
+3. void put(int key, int value) Update the value of the key if the key exists. 
+   Otherwise, add the key-value pair to the cache. If the number of keys exceeds the 
+   capacity from this operation, evict the least recently used key.
+
+The functions get and put must each run in O(1) average time complexity.
+"""
+class DLinkedNode(): 
+    def __init__(self):
+        self.key = 0
+        self.value = 0
+        self.prev = None
+        self.next = None
+            
+class LRUCache():
+    def _add_node(self, node):
+        """
+        Always add the new node right after head.
+        """
+        node.prev = self.head
+        node.next = self.head.next
+
+        self.head.next.prev = node
+        self.head.next = node
+
+    def _remove_node(self, node):
+        """
+        Remove an existing node from the linked list.
+        """
+        prev = node.prev
+        new = node.next
+
+        prev.next = new
+        new.prev = prev
+
+    def _move_to_head(self, node):
+        """
+        Move certain node in between to the head.
+        """
+        self._remove_node(node)
+        self._add_node(node)
+
+    def _pop_tail(self):
+        """
+        Pop the current tail.
+        """
+        res = self.tail.prev
+        self._remove_node(res)
+        return res
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.cache = {}
+        self.size = 0
+        self.capacity = capacity
+        self.head, self.tail = DLinkedNode(), DLinkedNode()
+
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        
+
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        node = self.cache.get(key, None)
+        if not node:
+            return -1
+
+        # move the accessed node to the head;
+        self._move_to_head(node)
+
+        return node.value
+
+    def put(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: void
+        """
+        node = self.cache.get(key)
+
+        if not node: 
+            newNode = DLinkedNode()
+            newNode.key = key
+            newNode.value = value
+
+            self.cache[key] = newNode
+            self._add_node(newNode)
+
+            self.size += 1
+
+            if self.size > self.capacity:
+                # pop the tail
+                tail = self._pop_tail()
+                del self.cache[tail.key]
+                self.size -= 1
+        else:
+            # update the value.
+            node.value = value
+            self._move_to_head(node)
+
+
+
+
+# 9. LFU Cache
 """
 https://leetcode.com/problems/lfu-cache
 Design and implement a data structure for a Least Frequently Used (LFU) cache.
@@ -410,7 +524,7 @@ class LFUCache:
 
 
 
-# 9. Find Median from Data Stream
+# 10. Find Median from Data Stream
 """
 https://leetcode.com/problems/find-median-from-data-stream/description/
 Implement the MedianFinder class:
@@ -462,3 +576,37 @@ class MedianFinder:
         elif len(self.large) > len(self.small):
             return self.large[0]
         return (-1 * self.small[0] + self.large[0]) / 2
+    
+
+
+
+# 11. Kth Largest Element in a Stream
+"""
+* * Good Problem
+Design a class to find the kth largest element in a stream. Note that it is the kth 
+largest element in the sorted order, not the kth distinct element.
+
+Implement KthLargest class:
+1. KthLargest(int k, int[] nums) Initializes the object with the integer k and the stream of 
+   integers nums.
+2. int add(int val) Appends the integer val to the stream and returns the element representing 
+   the kth largest element in the stream.
+"""
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        self.heap = nums
+        self.k = k
+
+        heapq.heapify(self.heap)
+
+        while len(self.heap) > k:
+            heapq.heappop(self.heap)
+
+    def add(self, val: int) -> int:
+        heapq.heappush(self.heap, val)
+
+        while len(self.heap) > self.k:
+            heapq.heappop(self.heap)
+
+        return self.heap[0]

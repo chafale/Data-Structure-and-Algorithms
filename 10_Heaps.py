@@ -109,3 +109,94 @@ class MedianFinder:
         elif len(self.large) > len(self.small):
             return self.large[0]
         return (-1 * self.small[0] + self.large[0]) / 2
+
+
+
+
+# 1. Kth Largest Element in a Stream
+"""
+* * Good Problem
+Design a class to find the kth largest element in a stream. Note that it is the kth 
+largest element in the sorted order, not the kth distinct element.
+
+Implement KthLargest class:
+1. KthLargest(int k, int[] nums) Initializes the object with the integer k and the stream of 
+   integers nums.
+2. int add(int val) Appends the integer val to the stream and returns the element representing 
+   the kth largest element in the stream.
+"""
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        self.heap = nums
+        self.k = k
+
+        heapq.heapify(self.heap)
+
+        while len(self.heap) > k:
+            heapq.heappop(self.heap)
+
+    def add(self, val: int) -> int:
+        heapq.heappush(self.heap, val)
+
+        while len(self.heap) > self.k:
+            heapq.heappop(self.heap)
+
+        return self.heap[0]
+    
+
+
+
+# 2. Last Stone Weight
+"""
+https://leetcode.com/problems/last-stone-weight
+You are given an array of integers stones where stones[i] is the weight of the ith stone.
+
+We are playing a game with the stones. On each turn, we choose the heaviest two stones and smash 
+them together. Suppose the heaviest two stones have weights x and y with x <= y. 
+The result of this smash is:
+1. If x == y, both stones are destroyed, and
+2. If x != y, the stone of weight x is destroyed, and the stone of weight y 
+   has new weight y - x.
+
+At the end of the game, there is at most one stone left.
+
+Return the weight of the last remaining stone. If there are no stones left, return 0.
+"""
+class Solution:
+    def lastStoneWeight(self, stones: List[int]) -> int:
+        heap = [-1 * stone for stone in stones]
+        heapq.heapify(heap)
+        while heap and len(heap) != 1:
+            elem1 = -1 * heapq.heappop(heap)
+            elem2 = -1 * heapq.heappop(heap)
+
+            smash = elem1 - elem2
+            if smash > 0:
+                heapq.heappush(heap, -1 * smash)
+
+        return -1 * heap[-1] if heap else 0
+    
+
+
+
+# 3. Kth Largest Element in an Array
+"""
+https://leetcode.com/problems/kth-largest-element-in-an-array/
+Given an integer array nums and an integer k, return the kth largest element in the array.
+You must solve it in O(n) time complexity.
+"""
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        heap = [-1 * num for num in nums]
+        heapq.heapify(heap)
+        cnt = 0
+        while True:
+            tmp = heapq.heappop(heap)
+            cnt += 1
+            if cnt == k:
+                return -1 * tmp
+            
+
+
+

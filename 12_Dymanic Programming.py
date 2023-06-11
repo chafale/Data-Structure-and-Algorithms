@@ -857,7 +857,7 @@ def f(idx, W):
 
 
 
-# Problem 23 - Rod Cutting Problem (or) Minimum Cost to Cut a Stick
+# Problem 23 - Rod Cutting Problem
 """
 Given a rod of length n  and array prices of length n denoting the cost of pieces 
 of the rod of length 1 to n, 
@@ -1749,6 +1749,29 @@ will lead to a scenario with total cost = 16 (as shown in the example
 photo 7 + 4 + 3 + 2 = 16).
 """
 # Solution :
+# Top- down approach easy and do-able
+class Solution:
+    def minCost(self, n: int, cuts: List[int]) -> int:
+        dp = {}
+        def recursion(l ,r):
+            if (r - l) == 1:
+                return 0
+
+            if (l, r) in dp:
+                return dp[(l, r)]
+
+            cost = []
+            for cutIdx in cuts:
+                if l < cutIdx < r:
+                    cost.append((r-l) + recursion(l, cutIdx) + recursion(cutIdx, r))
+
+            dp[(l, r)] = min(cost) if cost else 0
+            
+            return dp[(l, r)]
+
+        return recursion(0, n)
+
+# Bottom - up approach
 """
 pseudocode:
 
