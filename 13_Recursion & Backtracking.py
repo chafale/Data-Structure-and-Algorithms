@@ -569,7 +569,7 @@ class Solution:
 
 
 
-# 10. Beautiful Arrangement
+# 11. Beautiful Arrangement
 """
 https://leetcode.com/problems/beautiful-arrangement/
 Suppose you have n integers labeled 1 through n. A permutation of those n integers perm (1-indexed) 
@@ -614,7 +614,7 @@ class Solution:
 
 
 
-# 11. Letter Combinations of a Phone Number
+# 12. Letter Combinations of a Phone Number
 """
 https://leetcode.com/problems/letter-combinations-of-a-phone-number/
 Given a string containing digits from 2-9 inclusive, return all possible letter combinations that 

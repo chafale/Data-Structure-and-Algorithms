@@ -2187,3 +2187,33 @@ class Solution:
                     break
 
         return dp[0]
+
+
+
+
+# 54. Longest Arithmetic Subsequence
+"""
+* * Good question
+https://leetcode.com/problems/longest-arithmetic-subsequence
+Given an array nums of integers, return the length of the longest arithmetic subsequence in nums.
+A sequence seq is arithmetic if seq[i + 1] - seq[i] are all the same value (for 0 <= i < seq.length - 1).
+
+Input: nums = [9,4,7,2,10]
+Output: 3
+Explanation:  The longest arithmetic subsequence is [4,7,10].
+
+Input: nums = [20,1,15,3,10,5,8]
+Output: 4
+Explanation:  The longest arithmetic subsequence is [20,15,10,5].
+"""
+# Note read both examples carefully
+class Solution:
+    def longestArithSeqLength(self, nums: List[int]) -> int:
+        dp = {} # Key : <idx, difference>
+
+        for idx in range(len(nums)):
+            for prev in range(0, idx):
+                dp[(idx, nums[idx] - nums[prev])] = \
+                dp.get((prev, nums[idx] - nums[prev]), 1) + 1
+
+        return max(dp.values())

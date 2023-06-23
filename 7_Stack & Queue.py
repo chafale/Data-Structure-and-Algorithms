@@ -61,10 +61,9 @@ class Solution:
 
 # 2.  Largest Rectangle in Histogram
 """
+https://leetcode.com/problems/largest-rectangle-in-histogram/
 Given an array of integers heights representing the histogram's bar height 
 where the width of each bar is 1, return the area of the largest rectangle in the histogram.
-
-Link : https://leetcode.com/problems/largest-rectangle-in-histogram/
 """
 
 # Approach : using monotonic increasing stack
@@ -131,6 +130,8 @@ class FreqStack:
 # 4. 132 Pattern
 """
 * deceptive medium hard
+https://leetcode.com/problems/132-pattern/
+
 Given an array of n integers nums, a 132 pattern is a subsequence of three integers 
 nums[i], nums[j] and nums[k] such that i < j < k and nums[i] < nums[k] < nums[j].
 
@@ -400,7 +401,7 @@ If there is no future day for which this is possible, keep answer[i] == 0 instea
 Input: temperatures = [73,74,75,71,69,72,76,73]
 Output: [1,1,4,2,1,1,0,0]
 """
-# Monotonic devreasing stack
+# Monotonic decreasing stack
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         res = [0] * len(temperatures)
