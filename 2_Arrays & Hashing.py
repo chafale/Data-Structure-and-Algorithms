@@ -636,6 +636,7 @@ class Solution:
 
 # 17. Subarray Sum Equals K
 """
+* * Good Question
 https://leetcode.com/problems/subarray-sum-equals-k
 Given an array of integers nums and an integer k, return the total number of subarrays 
 whose sum equals to k.
@@ -734,3 +735,106 @@ class Solution:
                 timeCost += min(prevTime, time)
                 prevTime = max(prevTime, time)
         return timeCost
+    
+
+
+
+# 20. Minimum Changes To Make Alternating Binary String
+"""
+https://leetcode.com/problems/minimum-changes-to-make-alternating-binary-string
+You are given a string s consisting only of the characters '0' and '1'. In one 
+operation, you can change any '0' to '1' or vice versa.
+
+Return the minimum number of operations needed to make s alternating.
+
+Input: s = "0100"
+Output: 1
+Explanation: If you change the last character to '1', s will be "0101", which is alternating.
+
+Input: s = "1111"
+Output: 2
+Explanation: You need two operations to reach "0101" or "1010".
+"""
+class Solution:
+    def minOperations(self, s: str) -> int:
+        n = len(s)
+        res = 0
+        for i, char in enumerate(s):
+            if int(char) != i % 2:
+                res += 1
+        return min(res, n - res)
+    
+
+
+
+# 21. Maximum Product Subarray
+"""
+* * Good
+https://leetcode.com/problems/maximum-product-subarray/
+Given an integer array nums, find a subarray that has the largest product, 
+and return the product.
+
+Input: nums = [2,3,-2,4]
+Output: 6
+Explanation: [2,3] has the largest product 6.
+
+Input: nums = [-2,0,-1]
+Output: 0
+Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
+"""
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        res = nums[0]
+        currMax, currMin = 1, 1
+
+        for n in nums:
+            curr = currMax * n
+            currMax = max(curr, n * currMin, n)
+            currMin = min(curr, n * currMin, n)
+            res = max(res, currMax)
+
+        return res
+    
+
+
+
+# 23. Merge Sorted Array
+"""
+* * Good
+https://leetcode.com/problems/merge-sorted-array
+You are given two integer arrays nums1 and nums2, sorted in non-decreasing order.
+Merge nums1 and nums2 into a single array sorted in non-decreasing order.
+m and n, representing the number of elements in nums1 and nums2.
+
+Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+Output: [1,2,2,3,5,6]
+
+Input: nums1 = [1], m = 1, nums2 = [], n = 0
+Output: [1]
+
+Input: nums1 = [0], m = 0, nums2 = [1], n = 1
+Output: [1]
+"""
+# Hint : start merging nums2 in nums1 in reverse order i.e 
+# start from last index in nums1 and find who is largest number to fit the last index
+# -- use 3 pointers --
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        p1, p2, last = m-1, n-1, len(nums1) - 1
+        while p1 >= 0 and p2 >= 0:
+            if nums1[p1] > nums2[p2]:
+                nums1[last] = nums1[p1]
+                p1 -= 1
+            else:
+                nums1[last] = nums2[p2]
+                p2 -= 1
+            last -= 1
+
+        # p1 is completed however p2 is still remaining
+        while p2 >= 0:
+            nums1[last] = nums2[p2]
+            p2 -= 1
+            last -=1  

@@ -491,3 +491,55 @@ class Solution:
         leftPrev.next.next = cur  # cur is node after "right"
         leftPrev.next = prev  # prev is "right"
         return dummy.next
+
+
+
+
+# 13. Merge k Sorted Lists
+"""
+https://leetcode.com/problems/merge-k-sorted-lists
+You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+Merge all the linked-lists into one sorted linked-list and return it.
+
+Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+Explanation: The linked-lists are:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+merging them into one sorted list:
+1->1->2->3->4->4->5->6
+"""
+from queue import PriorityQueue
+
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+
+        # this is implement becoz initial Priority queue does not support comparison between 
+        # objects
+        class Wrapper():
+            def __init__(self, node) -> None:
+                self.node = node
+            def __lt__(self, other):
+                # this function is used by PriorityQueue for comparison
+                return self.node.val < other.node.val
+
+        # new list
+        head = tail = ListNode(0)
+
+        q = PriorityQueue()
+
+        for l in lists:
+            if l:
+                q.put(Wrapper(l)) # put intial node
+
+        while not q.empty():
+            node = q.get().node # get() function will return Wrapper object we need node object
+            tail.next = node
+            tail = tail.next
+            node = node.next
+            if node:
+                q.put(Wrapper(node))
+        return head.next

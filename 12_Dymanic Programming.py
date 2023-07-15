@@ -2207,6 +2207,7 @@ Output: 4
 Explanation:  The longest arithmetic subsequence is [20,15,10,5].
 """
 # Note read both examples carefully
+# Question is similar to LIS
 class Solution:
     def longestArithSeqLength(self, nums: List[int]) -> int:
         dp = {} # Key : <idx, difference>

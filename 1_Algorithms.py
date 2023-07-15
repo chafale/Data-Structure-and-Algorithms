@@ -173,3 +173,34 @@ class Solution:
                 count += -1
 
         return candidate
+
+
+
+
+# 6. Maximum Product Subarray
+"""
+* * Good
+https://leetcode.com/problems/maximum-product-subarray/
+Given an integer array nums, find a subarray that has the largest product, 
+and return the product.
+
+Input: nums = [2,3,-2,4]
+Output: 6
+Explanation: [2,3] has the largest product 6.
+
+Input: nums = [-2,0,-1]
+Output: 0
+Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
+"""
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        res = nums[0]
+        currMax, currMin = 1, 1
+
+        for n in nums:
+            curr = currMax * n
+            currMax = max(curr, n * currMin, n)
+            currMin = min(curr, n * currMin, n)
+            res = max(res, currMax)
+
+        return res

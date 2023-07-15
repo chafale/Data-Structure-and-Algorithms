@@ -202,8 +202,6 @@ Output: true
 
 Input: s = "(*))"
 Output: true
-
-
 """
 # Greedy: O(n)
 class Solution:
@@ -550,3 +548,65 @@ class Solution:
                 stack.append(int(multiplier) * sub_str)
 
         return "".join(stack)
+    
+
+
+
+# 16. Count Binary Substrings
+"""
+* * Ticky question
+https://leetcode.com/problems/count-binary-substrings/
+Given a binary string s, return the number of non-empty substrings that have 
+the same number of 0's and 1's, and all the 0's and all the 1's in these substrings 
+are grouped consecutively.
+
+Input: s = "00110011"
+Output: 6
+Explanation: There are 6 substrings that have equal number of consecutive 
+1's and 0's: "0011", "01", "1100", "10", "0011", and "01".
+Notice that some of these substrings repeat and are counted the number of times they occur.
+Also, "00110011" is not a valid substring because all the 0's (and 1's) are not grouped together.
+"""
+# Hint : To solve this problem just ignore the example and consider the scenario below: 
+# 
+# How many substrings are present in the below string with equal 0's and 1's?
+#          0 0 0 1 1 1
+#              ---
+#            -------
+#          -----------
+# Answer = 3
+# 
+# Now if we add one more zero to it :
+#         0 0 0 0 1 1 1
+#               ---
+#             -------
+#           ----------- 
+# 
+# Answer = Min(countZeros, countOnes) = 3
+# 
+# Algorithm : here we will maintain two variables prevRunOfChar and currRunOfChar
+# and we will be staring the loop from 1st index
+class Solution:
+    def countBinarySubstrings(self, s: str) -> int:
+        res = 0
+
+        prevRunOfChar = 0 
+        currRunOfChar = 1 # bcoz we are staring from 1st index and to coust char at 0th index
+
+        i = 1
+        while i < len(s):
+            # 1 1 0 0 0 1 1 0    OR     1 1 0 0 0 1 1 0       
+            # -----                     -----------
+            #     i                               i
+            if s[i-1] != s[i]:
+                res += min(prevRunOfChar, currRunOfChar)
+                prevRunOfChar = currRunOfChar
+                currRunOfChar = 1
+            else:
+                currRunOfChar += 1
+
+            i += 1
+        
+        # finally at the end of string
+        res += min(prevRunOfChar, currRunOfChar)
+        return res

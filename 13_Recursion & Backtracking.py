@@ -1,3 +1,4 @@
+from collections import Counter
 # =======================================================================================================
 # ==================================== RECURSIONS PROBLEMS ==============================================
 # =======================================================================================================
@@ -648,3 +649,57 @@ class Solution:
             backtrack(0, "")
 
         return res
+
+
+
+
+# 13. Maximum Length of a Concatenated String with Unique Characters
+"""
+* * Can skip while revising
+You are given an array of strings arr. A string s is formed by the concatenation of a 
+subsequence of arr that has unique characters.
+
+Return the maximum possible length of s.
+
+Input: arr = ["un","iq","ue"]
+Output: 4
+Explanation: All the valid concatenations are:
+- ""
+- "un"
+- "iq"
+- "ue"
+- "uniq" ("un" + "iq")
+- "ique" ("iq" + "ue")
+Maximum length is 4.
+
+Input: arr = ["cha","r","act","ers"]
+Output: 6
+Explanation: Possible longest valid concatenations are 
+"chaers" ("cha" + "ers") and "acters" ("act" + "ers").
+"""
+class Solution:
+    def maxLength(self, arr: List[str]) -> int:
+        # backtracking solution
+        def overlap(s1, s2):
+            c = Counter(s1) + Counter(s2)
+            return max(c.values()) > 1
+
+        charSet = set()
+
+        def backtrack(idx):
+            if idx == len(arr):
+                return len(charSet)
+
+            res = 0
+            if not overlap(charSet, arr[idx]):
+                # include the string at current index
+                for char in arr[idx]:
+                    charSet.add(char)
+                res = backtrack(idx + 1)
+                #cleanup
+                for char in arr[idx]:
+                    charSet.remove(char)
+
+            return max(res, backtrack(idx + 1))
+
+        return backtrack(0)
