@@ -197,9 +197,20 @@ Output: [1,2,3,5]
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
         dummy = ListNode(0, head)
+
+        """
+        dummy 
+        |
+        `---> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+                              nth
+
+        slow = dummy 
+        and fast = k nodes (apart) from slow
+        """
         left = dummy
         right = head
 
+        # adjust right k nodes apart from left
         while n > 0:
             right = right.next
             n -= 1

@@ -610,3 +610,41 @@ class Solution:
         # finally at the end of string
         res += min(prevRunOfChar, currRunOfChar)
         return res
+    
+
+
+
+# 17. String Compression
+"""
+https://leetcode.com/problems/string-compression/
+Given an array of characters chars, compress it using the following algorithm:
+chars = ["a","a","b","b","c","c","c"]
+Output : 6 because the len of arr ["a","2","b","2","c","3"] is 6
+
+Do the operation in-place.
+
+and Input: chars = ["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+Output: Return 4, and the first 4 characters of the input array should be: ["a","b","1","2"].
+"""
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        index = 0
+        
+        i = 0
+        while i < len(chars):
+            j = i
+            while j < len(chars) and chars[i] == chars[j]:
+                j += 1
+
+            chars[index] = chars[i]
+            index += 1
+
+            if (j - i) > 1:
+                numStr = str(j - i)
+                for c in numStr:
+                    chars[index] = c
+                    index += 1
+    
+            i = j
+
+        return index

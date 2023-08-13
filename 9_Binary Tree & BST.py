@@ -1788,6 +1788,7 @@ class Solution:
 
 # Problem 11 - Unique Binary Search Trees
 """
+* * Good 
 https://leetcode.com/problems/unique-binary-search-trees/
 Number of structurally unique BST's
 
@@ -1825,7 +1826,41 @@ class Solution:
 
 
 
-# Problem 12 - Convert BST to Greater Tree
+# Problem 12 - Unique Binary Search Trees II
+"""
+* * Good 
+https://leetcode.com/problems/unique-binary-search-trees-ii
+Given an integer n, return all the structurally unique BST's (binary search trees), 
+which has exactly n nodes of unique values from 1 to n. 
+Return the answer in any order.
+
+Input: n = 3
+Output: [[1,null,2,null,3],[1,null,3,2],[2,1,3],[3,1,null,null,2],[3,2,null,1]]
+"""
+class Solution:
+    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+
+        def generate(left, right):
+            if left == right:
+                return [TreeNode(left)]
+
+            if left > right:
+                return [None]
+
+            res = []
+            for val in range(left, right + 1):
+                for leftTree in generate(left, val - 1):
+                    for rightTree in generate(val + 1, right):
+                        root = TreeNode(val, leftTree, rightTree)
+                        res.append(root)
+            return res
+
+        return generate(1, n)
+
+
+
+
+# Problem 13 - Convert BST to Greater Tree
 """
 * * Good Problem
 https://leetcode.com/problems/convert-bst-to-greater-tree/

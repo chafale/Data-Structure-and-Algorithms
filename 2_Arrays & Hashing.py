@@ -838,3 +838,95 @@ class Solution:
             nums1[last] = nums2[p2]
             p2 -= 1
             last -=1  
+
+
+
+
+# 24. Range Sum Query 2D - Immutable
+"""
+* * Good Question
+https://leetcode.com/problems/range-sum-query-2d-immutable/
+Given a 2D matrix matrix, handle multiple queries of the following type:
+Calculate the sum of the elements of matrix inside the rectangle defined by its 
+upper left corner (row1, col1) and lower right corner (row2, col2).
+
+Implement the NumMatrix class:
+1. NumMatrix(int[][] matrix) Initializes the object with the integer matrix matrix.
+2. int sumRegion(int row1, int col1, int row2, int col2) Returns the sum of the elements 
+   of matrix inside the rectangle defined by its upper left corner (row1, col1) and lower 
+   right corner (row2, col2).
+
+You must design an algorithm where sumRegion works on O(1) time complexity.
+"""
+class NumMatrix:
+
+    def __init__(self, matrix: List[List[int]]):
+        ROWS, COLS = len(matrix), len(matrix[0])
+        self.prefixMatrix = [[0] * (COLS + 1) for _ in range(ROWS + 1)]
+
+        for r in range(ROWS):
+            prefix = 0
+            for c in range(COLS):
+                prefix += matrix[r][c]
+                above = self.prefixMatrix[r][c+1]
+                self.prefixMatrix[r + 1][c + 1] = prefix + above
+
+    def sumRegion(self, row1: int, col1: int, row2: int, col2: int) -> int:
+        row1, col1, row2, col2 = row1 + 1, col1 + 1, row2 + 1, col2 + 1
+
+        bottomLeft = self.prefixMatrix[row2][col2]
+        top = self.prefixMatrix[row1 - 1][col2]
+        left = self.prefixMatrix[row2][col1 - 1]
+        topLeft = self.prefixMatrix[row1 - 1][col1 - 1]
+
+        return bottomLeft - top - left + topLeft
+    
+
+
+
+# 25. Single Element in a Sorted Array
+"""
+https://leetcode.com/problems/single-element-in-a-sorted-array
+You are given a sorted array consisting of only integers where every element appears 
+exactly twice, except for one element which appears exactly once.
+
+Return the single element that appears only once.
+
+Your solution must run in O(log n) time and O(1) space.
+
+Input: nums = [1,1,2,3,3,4,4,8,8]
+Output: 2
+
+Input: nums = [3,3,7,7,10,11,11]
+Output: 10
+"""
+# Approach 1 : O(n) TC using XOR
+class Solution:
+    def singleNonDuplicate(self, nums: List[int]) -> int:
+        res = nums[0]
+        for num in nums[1:]:
+            res ^= num
+        return res
+    
+# Approachh 2 : BInary Search O(log(n))
+# https://www.youtube.com/watch?v=HGtqdzyUJ3k
+class Solution:
+    def singleNonDuplicate(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1
+
+        while l <= r:
+            mid = (l + r)//2
+
+            # check if mid is single element
+            if (mid - 1 < 0 or nums[mid - 1] != nums[mid]) and \
+               (mid + 1 == len(nums) or nums[mid + 1] != nums[mid]):
+                return nums[mid]
+
+            leftside = mid - 1 if nums[mid] == nums[mid - 1] else mid
+
+            # check if left side elements are even ---
+            # Note : single element will be present on the side where there are odd num of elements
+            if leftside % 2 == 0:
+                l = mid + 1
+            else:
+                r = mid - 1
