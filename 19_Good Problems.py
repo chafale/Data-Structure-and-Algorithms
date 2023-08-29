@@ -200,3 +200,86 @@ class Solution:
             moves += diff
 
         return moves
+    
+
+
+
+# 7. Excel Sheet Column Title
+"""
+https://leetcode.com/problems/excel-sheet-column-title
+
+Given an integer columnNumber, return its corresponding column title as it appears in an Excel sheet.
+
+For example:
+
+A -> 1
+B -> 2
+C -> 3
+...
+Z -> 26
+AA -> 27
+AB -> 28 
+...
+
+Example 1:
+Input: columnNumber = 1
+Output: "A"
+
+Example 2:
+Input: columnNumber = 28
+Output: "AB"
+
+Example 3:
+Input: columnNumber = 701
+Output: "ZY"
+"""
+class Solution:
+    def convertToTitle(self, columnNumber: int) -> str:
+        res = ""
+        while columnNumber > 0:
+            offset = (columnNumber - 1) % 26
+            res += chr(ord('A') + offset)
+            columnNumber = (columnNumber - 1) // 26
+
+        return res[::-1] # reverse
+    
+
+
+
+# 8. Excel Sheet Column Number
+"""
+https://leetcode.com/problems/excel-sheet-column-number
+
+Given a string columnTitle that represents the column title as appears in an Excel sheet, return its corresponding column number.
+
+For example:
+
+A -> 1
+B -> 2
+C -> 3
+...
+Z -> 26
+AA -> 27
+AB -> 28 
+...
+
+Example 1:
+Input: columnTitle = "A"
+Output: 1
+
+Example 2:
+Input: columnTitle = "AB"
+Output: 28
+
+Example 3:
+Input: columnTitle = "ZY"
+Output: 701
+"""
+class Solution:
+    def titleToNumber(self, columnTitle: str) -> int:
+        res = 0
+        for char in columnTitle:
+            res = res * 26
+            res += (ord(char) - ord('A') + 1)
+
+        return res

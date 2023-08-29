@@ -880,53 +880,75 @@ class NumMatrix:
         topLeft = self.prefixMatrix[row1 - 1][col1 - 1]
 
         return bottomLeft - top - left + topLeft
-    
 
 
 
-# 25. Single Element in a Sorted Array
+
+# 25. Minimum Penalty for a Shop
 """
-https://leetcode.com/problems/single-element-in-a-sorted-array
-You are given a sorted array consisting of only integers where every element appears 
-exactly twice, except for one element which appears exactly once.
+https://leetcode.com/problems/minimum-penalty-for-a-shop/
+You are given the customer visit log of a shop represented by a 0-indexed 
+string customers consisting only of characters 'N' and 'Y':
+    -- if the ith character is 'Y', it means that customers come at the ith hour
+    -- whereas 'N' indicates that no customers come at the ith hour.
 
-Return the single element that appears only once.
+If the shop closes at the jth hour (0 <= j <= n), the penalty is calculated as follows:
+1. For every hour when the shop is open and no customers come, the penalty increases by 1.
+2. For every hour when the shop is closed and customers come, the penalty increases by 1.
 
-Your solution must run in O(log n) time and O(1) space.
+Return the earliest hour at which the shop must be closed to incur a minimum penalty.
 
-Input: nums = [1,1,2,3,3,4,4,8,8]
+Input: customers = "YYNY"
 Output: 2
-
-Input: nums = [3,3,7,7,10,11,11]
-Output: 10
+Explanation: 
+- Closing the shop at the 0th hour incurs in 1+1+0+1 = 3 penalty.
+- Closing the shop at the 1st hour incurs in 0+1+0+1 = 2 penalty.
+- Closing the shop at the 2nd hour incurs in 0+0+0+1 = 1 penalty.
+- Closing the shop at the 3rd hour incurs in 0+0+1+1 = 2 penalty.
+- Closing the shop at the 4th hour incurs in 0+0+1+0 = 1 penalty.
+Closing the shop at 2nd or 4th hour gives a minimum penalty. 
+Since 2 is earlier, the optimal closing time is 2.
 """
-# Approach 1 : O(n) TC using XOR
 class Solution:
-    def singleNonDuplicate(self, nums: List[int]) -> int:
-        res = nums[0]
-        for num in nums[1:]:
-            res ^= num
-        return res
-    
-# Approachh 2 : BInary Search O(log(n))
-# https://www.youtube.com/watch?v=HGtqdzyUJ3k
-class Solution:
-    def singleNonDuplicate(self, nums: List[int]) -> int:
-        l, r = 0, len(nums) - 1
+    def bestClosingTime(self, customers: str) -> int:
+        #     Intution for this problem :-
+        #     consider the case :
+        #         N Y N Y Y
+        #             j
 
-        while l <= r:
-            mid = (l + r)//2
+        #         if the shop is close at j-th hour then 
+        #             it is also closed for j+1, j+2, . . . hours
 
-            # check if mid is single element
-            if (mid - 1 < 0 or nums[mid - 1] != nums[mid]) and \
-               (mid + 1 == len(nums) or nums[mid + 1] != nums[mid]):
-                return nums[mid]
+        #         so for the penalty ==> count no. of N before j and 
+        #                                 (add) count no. of Y after j
 
-            leftside = mid - 1 if nums[mid] == nums[mid - 1] else mid
+        #         Note : here answer can be index n + 1 as well <edge case>
+        
+        n = len(customers)
 
-            # check if left side elements are even ---
-            # Note : single element will be present on the side where there are odd num of elements
-            if leftside % 2 == 0:
-                l = mid + 1
-            else:
-                r = mid - 1
+        prefix_n = [0] * (n + 1)
+        postfix_y = [0] * (n + 1)
+
+        # calculating prefix of "N"
+        n_soFar = 0
+        for i in range(n + 1):
+            prefix_n[i] = n_soFar
+            if i < n and customers[i] == "N":
+                n_soFar += 1
+
+        # calculating postfix of "Y"
+        y_soFar = 0
+        for i in range(n - 1, -1, -1):
+            if customers[i] == "Y":
+                y_soFar += 1
+            postfix_y[i] = y_soFar
+
+        # calculating penalty
+        minIdx, minPenalty = n, n
+        for i in range(n + 1):
+            penalty = prefix_n[i] + postfix_y[i]
+            if penalty < minPenalty:
+                minPenalty = penalty
+                minIdx = i
+
+        return minIdx
