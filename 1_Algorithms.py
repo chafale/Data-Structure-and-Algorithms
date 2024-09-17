@@ -155,6 +155,8 @@ Output: 2
 Input: nums = [3,2,3]
 Output: 3
 """
+# Solution 1 : sort and the majority element is the element that appears more than ⌊n / 2⌋ times.
+# Soultion 2 : as below
 class Solution:
     def majorityElement(self, nums):
         count = 0
@@ -196,9 +198,9 @@ class Solution:
         currMax, currMin = 1, 1
 
         for n in nums:
-            curr = currMax * n
-            currMax = max(curr, n * currMin, n)
-            currMin = min(curr, n * currMin, n)
+            # storing max result in temp so that currMax does get override in currMin calculation
+            temp = max(n * currMax, n * currMin, n)
+            currMin = min(n * currMax, n * currMin, n)
+            currMax = temp
             res = max(res, currMax)
-
         return res
