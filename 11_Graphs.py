@@ -383,6 +383,11 @@ def dijkstras(graph: List[List[int]], start_node):
 
     return distance
 
+"""
+TC : O(E log V)
+SC: O(E)
+"""
+
 
 
 
