@@ -495,15 +495,20 @@ def primsAlgo(graph):
         if node not in visited:
             visited.add(node)
             if parent != -1:
-                min_spanning_tree.append((node, parent))
+                min_spanning_tree.append((parent, node))
             
             mst_sum += wt
 
             for neighbour in graph[node]:
                 if neighbour not in visited:
-                    heapq.heappush(pq, (neighbour, node))
+                    heapq.heappush(pq, (graph[node][neighbour], neighbour, node)) # <wt, node, parent>
 
     return min_spanning_tree, mst_sum
+
+"""
+TC : O(E logV)
+SC : O(V)
+"""
 
 
 
