@@ -515,6 +515,8 @@ SC : O(V)
 
 # Basic 12 - Disjoint Set
 """
+*** VVVVIMP
+
 Given a graph like :
     1 - 2 - 3 ; 4 - 5 ; 6 - 7
     
@@ -564,6 +566,27 @@ class DisjointSet:
             self.rank[p2] += 1
 
         return True
+
+
+
+
+# Basic 13 - Strongly Connected Components SCCs - Kosaraju's Algorithm
+"""
+1.  Strongly connected components are only valid for directed graphs. ***
+
+2. In a directed graph, a Strongly Connected Component is a subset of vertices where every 
+vertex in the subset is reachable from every other vertex in the same subset by traversing 
+the directed edges.
+
+Algorithm :
+1. Sort all the edges based on the finishing times
+2. Reverse all the edges in the graph
+3. Do DFS :
+    a. count number of scc's
+    b. print all scc's
+
+https://www.youtube.com/watch?v=R6uoSjZ2imo&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=28
+"""
 
 
 
