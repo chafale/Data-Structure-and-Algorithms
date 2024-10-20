@@ -75,8 +75,13 @@ graph_cycle = {
 }
 # Approach 1: using BFS
 """
-Note : insert the node and its parent in the queue - <bcoz . . . . . .
-and a graph has a cycle if the next insering node has already been visited
+Note :  insert the node and its parent in the queue - <bcoz . . . . . .
+        The graph has a cycle if the neightbour is already visited and parent of the neighbour
+        is not same. <This is only true for undirected graph >
+        
+        \
+          7
+        /
 """
 def detectCycleBFS(start_node) -> bool:
     visited = set()
