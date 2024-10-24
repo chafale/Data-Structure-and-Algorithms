@@ -70,6 +70,9 @@ Space complexity : O(n)
 
 
 # Basic 2 : Height of Binary Tree (or) Depth of the Binary Tree
+"""
+Height of the Binary Tree is number of edges from the root node to the furthest leaf node.
+"""
 def heightBT(node):
     if not node:
         return 0
@@ -133,16 +136,15 @@ class Solution:
         def heightBT(node):
             if not node:
                 return 0, True
-            
-            lh, l_isBalanced = heightBT(node.left)
-            rh, r_isBalanced = heightBT(node.right)
 
-            node_isBalanced = False
-            if l_isBalanced and r_isBalanced and abs(lh - rh) <= 1:
-                node_isBalanced = True
+            lh, is_left_balanced = heightBT(node.left)
+            rh, is_right_balanced = heightBT(node.right)
 
-            return 1 + max(lh, rh), node_isBalanced
+            is_balanced = False
+            if is_left_balanced and is_right_balanced and abs(lh - rh) <= 1:
+                is_balanced = True
 
+            return 1 + max(lh, rh), is_balanced
         return heightBT(root)[1]
 
 
