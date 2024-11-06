@@ -657,7 +657,7 @@ Output: [3,9,20,null,null,15,7]
 """
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        p_idx = 0
+        p_idx = 0 # pre-order index
 
         def dfs(i, j):
             nonlocal p_idx
@@ -668,7 +668,7 @@ class Solution:
             root = TreeNode(preorder[p_idx])
 
             # finding the root node in in_order
-            i_idx = 0
+            i_idx = 0 # in-order index
             for k in range(i, j + 1):
                 if inorder[k] == preorder[p_idx]:
                     i_idx = k
