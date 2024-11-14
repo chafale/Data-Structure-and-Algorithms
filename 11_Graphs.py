@@ -1936,7 +1936,7 @@ class Solution:
         for r in range(row):
             for c in range(col):
                 if grid[r][c] == 1 and (r, c) not in visited:
-                    area = dfs(r, c)
+                    area = dfs(r, c)  
                     max_area = max(max_area, area)
         return max_area
 

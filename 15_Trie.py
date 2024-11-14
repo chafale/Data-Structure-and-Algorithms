@@ -52,7 +52,7 @@ class Trie:
                 return False
             curr = curr.children[c]
 
-        return curr.children.end_of_word
+        return curr.end_of_word
 
     def startsWith(self, prefix: str) -> bool:
         curr = self.root
