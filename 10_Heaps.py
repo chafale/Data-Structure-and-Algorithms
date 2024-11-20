@@ -80,28 +80,36 @@ medianFinder.addNum(2);    // arr = [1, 2]
 medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
 medianFinder.addNum(3);    // arr[1, 2, 3]
 medianFinder.findMedian(); // return 2.0
+
+https://www.youtube.com/watch?v=itmhHWaHupI
 """ 
 class MedianFinder:
     def __init__(self):
         """
         initialize your data structure here.
         """
-        # two heaps, large, small, minheap, maxheap
+        # Two heaps:
+        # 1. large heap (min heap)
+        # 2. small heap (max heap)
+
         # heaps should be equal size
         self.small, self.large = [], []  # maxHeap, minHeap (python default)
 
     def addNum(self, num: int) -> None:
-        if self.large and num > self.large[0]:
-            heapq.heappush(self.large, num)
-        else:
-            heapq.heappush(self.small, -1 * num)
+        heapq.heappush(self.small, -1 * num)
 
+        # make sure every num in small heap is <= every num in large heap
+        if self.small and self.large and (-1 * self.small[0]) > self.large[0]:
+            pop_elem = -1 * heapq.heappop(self.small)
+            heapq.heappush(self.large, pop_elem)
+
+        # heaps are of un-even sizes
         if len(self.small) > len(self.large) + 1:
-            val = -1 * heapq.heappop(self.small)
-            heapq.heappush(self.large, val)
+            pop_elem = -1 * heapq.heappop(self.small)
+            heapq.heappush(self.large, pop_elem)
         if len(self.large) > len(self.small) + 1:
-            val = heapq.heappop(self.large)
-            heapq.heappush(self.small, -1 * val)
+            pop_elem = heapq.heappop(self.large)
+            heapq.heappush(self.small, -1 * pop_elem)
 
     def findMedian(self) -> float:
         if len(self.small) > len(self.large):
@@ -116,6 +124,7 @@ class MedianFinder:
 # 1. Kth Largest Element in a Stream
 """
 * * Good Problem
+https://leetcode.com/problems/kth-largest-element-in-a-stream/description/
 Design a class to find the kth largest element in a stream. Note that it is the kth 
 largest element in the sorted order, not the kth distinct element.
 
@@ -124,6 +133,39 @@ Implement KthLargest class:
    integers nums.
 2. int add(int val) Appends the integer val to the stream and returns the element representing 
    the kth largest element in the stream.
+
+Example 1:
+
+Input:
+["KthLargest", "add", "add", "add", "add", "add"]
+[[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+
+Output: [null, 4, 5, 5, 8, 8]
+
+Explanation:
+
+KthLargest kthLargest = new KthLargest(3, [4, 5, 8, 2]);
+kthLargest.add(3); // return 4
+kthLargest.add(5); // return 5
+kthLargest.add(10); // return 5
+kthLargest.add(9); // return 8
+kthLargest.add(4); // return 8
+
+Example 2:
+
+Input:
+["KthLargest", "add", "add", "add", "add"]
+[[4, [7, 7, 7, 7, 8, 3]], [2], [10], [9], [9]]
+
+Output: [null, 7, 7, 7, 8]
+
+Explanation:
+
+KthLargest kthLargest = new KthLargest(4, [7, 7, 7, 7, 8, 3]);
+kthLargest.add(2); // return 7
+kthLargest.add(10); // return 7
+kthLargest.add(9); // return 7
+kthLargest.add(9); // return 8
 """
 class KthLargest:
 
