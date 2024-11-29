@@ -79,6 +79,14 @@ Time complexity : 2^n
 """
 Given an integer array nums of unique elements, return all possible subsets (the power set).
 https://leetcode.com/problems/subsets/
+
+Example 1:
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+
+Example 2:
+Input: nums = [0]
+Output: [[],[0]]
 """
 from typing import List
 
@@ -378,20 +386,20 @@ https://youtu.be/LuLCLgMElus?t=137
     Pseudo code:
         1. Find the dip point 
         Linearly traverse nums from backwards 
-           and find first index `i` such that nums[i] < nums[i+1] --> say this as index-1
+           and find first index `i` such that nums[i] < nums[i+1] --> say this as index1
            For example:
               1  3    5    4   2
                  ^    ^
                  i   i+1
 
-            here index-1 is value 3 (having index 1)
+            here index1 is value 3 (having index 1)
             i.e find the dip point from backward (as u can see no.s started to increase 
             from backwards and at 3 there is a dip)
 
         2. Again linearly traverse nums from backwards 
-           and find first index (say index-2) which is greater than value at index-1
+           and find first index (say index2) which is greater than dip point value
            In the example above its 4 (having index 3)
-        3. swap(index-1, index-2)
+        3. swap(index1, index2)
         4. Reverse everything from (index-1 + 1 to n)
 """
 
@@ -446,6 +454,24 @@ https://leetcode.com/problems/flower-planting-with-no-adjacent/description/
 Given an undirected graph and an integer M. 
 The task is to determine if the graph can be colored with at most M colors 
 such that no two adjacent vertices of the graph are colored with the same color.
+
+Example 1:
+Input: n = 3, paths = [[1,2],[2,3],[3,1]]
+Output: [1,2,3]
+Explanation:
+Gardens 1 and 2 have different types.
+Gardens 2 and 3 have different types.
+Gardens 3 and 1 have different types.
+Hence, [1,2,3] is a valid answer. Other valid answers include [1,2,4], [1,4,2], and [3,2,1].
+
+Example 2:
+Input: n = 4, paths = [[1,2],[3,4]]
+Output: [1,2,1,2]
+
+Example 3:
+Input: n = 4, paths = [[1,2],[2,3],[3,4],[4,1],[1,3],[2,4]]
+Output: [1,2,3,4]
+
 """
 class Solution:
     def graphColoring(self, m:int, graph:dict) -> bool:
@@ -467,8 +493,8 @@ class Solution:
             for _color in range(1, m+1):
                 # is it possible to color a node with _color
                 if color_posible(node, _color):
-                    node_color[node] = color
-                    if backtrack(node + 1) == True:
+                    node_color[node] = _color
+                    if backtrack(node + 1, color) == True:
                         return True
                     node_color[node] = 0
             
@@ -656,6 +682,7 @@ class Solution:
 # 13. Maximum Length of a Concatenated String with Unique Characters
 """
 * * Can skip while revising
+https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters
 You are given an array of strings arr. A string s is formed by the concatenation of a 
 subsequence of arr that has unique characters.
 
