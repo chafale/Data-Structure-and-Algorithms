@@ -104,7 +104,7 @@ head1 = ListNode("1->2->3->4")
 head2 = ListNode("6->5->4")
 # here second will always points to shorter list
 first, second = head1, head2
-while second.next:
+while second:
     tmp = first.next
     first.next = second
     first = tmp
@@ -207,6 +207,7 @@ class Solution:
         slow = dummy 
         and fast = k nodes (apart) from slow
         """
+        dummy = ListNode(0, head)
         left = dummy
         right = head
 
@@ -464,6 +465,7 @@ class Solution:
                 curr = tmp
 
             # * * this portion is tricky
+            # this step is required to update the grpPrev pointer
             tmp = grpPrev.next
             grpPrev.next = kth
             grpPrev = tmp
@@ -523,37 +525,33 @@ Explanation: The linked-lists are:
 merging them into one sorted list:
 1->1->2->3->4->4->5->6
 """
-from queue import PriorityQueue
+# Solution : Use the Priority Queue to merge the linklist lists
+class HeapNode:
+    def __init__(self, node):
+        self.node = node
+
+    def __lt__(self, other):
+        return self.node.val < other.node.val
 
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-
-        # this is implement becoz initial Priority queue does not support comparison between 
-        # objects
-        class Wrapper():
-            def __init__(self, node) -> None:
-                self.node = node
-            def __lt__(self, other):
-                # this function is used by PriorityQueue for comparison
-                return self.node.val < other.node.val
-
-        # new list
-        head = tail = ListNode(0)
-
-        q = PriorityQueue()
+        dummy = ListNode(-1)
+        curr = dummy
+        heap = []
 
         for l in lists:
             if l:
-                q.put(Wrapper(l)) # put intial node
+                heapq.heappush(heap, HeapNode(l))
 
-        while not q.empty():
-            node = q.get().node # get() function will return Wrapper object we need node object
-            tail.next = node
-            tail = tail.next
-            node = node.next
-            if node:
-                q.put(Wrapper(node))
-        return head.next
+        while heap:
+            heap_node = heapq.heappop(heap)
+            curr.next = heap_node.node
+            curr = curr.next
+
+            if heap_node.node.next:
+                heapq.heappush(heap, HeapNode(heap_node.node.next))
+
+        return dummy.next
     
 
 
