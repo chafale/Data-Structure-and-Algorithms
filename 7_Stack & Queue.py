@@ -31,6 +31,7 @@ class Solution:
         dominoes = list(dominoes)
         q = deque()
 
+        # Push all the L and R dominoes with their index to the queue
         for i, d in enumerate(dominoes):
             if d != ".":
                 q.append((i, d))
@@ -64,6 +65,11 @@ class Solution:
 https://leetcode.com/problems/largest-rectangle-in-histogram/
 Given an array of integers heights representing the histogram's bar height 
 where the width of each bar is 1, return the area of the largest rectangle in the histogram.
+
+Input: heights = [2,1,5,6,2,3]
+Output: 10
+Explanation: The above is a histogram where width of each bar is 1.
+The largest rectangle is shown in the red area, which has an area = 10 units.
 """
 
 # Approach : using monotonic increasing stack
@@ -99,6 +105,7 @@ Implement the FreqStack class:
 3. int pop() removes and returns the most frequent element in the stack.
     If there is a tie for the most frequent element, the element closest to the stack's top is 
     removed and returned.
+https://www.youtube.com/watch?v=Z6idIicFDOE
 """
 # we will seaprate each number in to bucket of their count : 
 # and bucket will contain list of elements
@@ -129,7 +136,7 @@ class FreqStack:
 
 # 4. 132 Pattern
 """
-* deceptive medium hard
+* Deceptive medium hard problem
 https://leetcode.com/problems/132-pattern/
 
 Given an array of n integers nums, a 132 pattern is a subsequence of three integers 
@@ -220,6 +227,7 @@ Input: num = "10200", k = 1
 Output: "200"
 Explanation: Remove the leading 1 and the number is 200. Note that the output must not 
 contain leading zeroes.
+https://www.youtube.com/watch?v=cFabMOnJaq0
 """
 class Solution:
     def removeKdigits(self, num: str, k: int) -> str:
@@ -227,7 +235,7 @@ class Solution:
         
         # Construct a monotone increasing sequence of digits
         for digit in num:
-            while k and numStack and numStack[-1] > digit:
+            while k > 0 and numStack and numStack[-1] > digit:
                 numStack.pop()
                 k -= 1
         
@@ -253,6 +261,9 @@ Output: "aaabcbc"
 Input: s = "3[a2[c]]"
 Output: "accaccacc"
 """
+# Solution 1: Keep pushing the elements in the stack until we get a "]" element
+# Then pop the elements from the stack until we get a "[" element 
+# and append the popped elements to the result string and the calculate the multiplier digit
 class Solution:
     def decodeString(self, s: str) -> str:
         stack = []
@@ -279,16 +290,26 @@ class Solution:
 
 # 8. Simplify Path
 """
+https://leetcode.com/problems/simplify-path
 Given a string path, which is an absolute path (starting with a slash '/') to a file or 
 directory in a Unix-style file system, convert it to the simplified canonical path.
 
+The rules of a Unix-style file system are as follows:
+
+1. A single period '.' represents the current directory.
+2. A double period '..' represents the previous/parent directory.
+3. Multiple consecutive slashes such as '//' and '///' are treated as a single slash '/'.
+4. Any sequence of periods that does not match the rules above should be treated as a valid 
+   directory or file name. For example, '...' and '....' are valid directory or file names.
+
+
 The canonical path should have the following format:
 
-The path starts with a single slash '/'.
-Any two directories are separated by a single slash '/'.
-The path does not end with a trailing '/'.
-The path only contains the directories on the path from the root directory to the target file 
-or directory (i.e., no period '.' or double period '..')
+1. The path starts with a single slash '/'.
+2. Any two directories are separated by a single slash '/'.
+3. The path does not end with a trailing '/'.
+4. The path only contains the directories on the path from the root directory to the target file 
+   or directory (i.e., no period '.' or double period '..')
 
 Return the simplified canonical path.
 """
@@ -419,20 +440,24 @@ class Solution:
 
 # 12. Asteroid Collision
 """
-https://leetcode.com/problems/asteroid-collision/
+https://leetcode.com/problems/asteroid-collision
 We are given an array asteroids of integers representing asteroids in a row.
 
-For each asteroid, the absolute value represents its size, and the sign represents its 
-direction (positive meaning right, negative meaning left). Each asteroid moves at 
-the same speed.
+For each asteroid, the absolute value represents its size, and the sign represents 
+its direction (positive meaning right, negative meaning left). Each asteroid moves 
+at the same speed.
 
-Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller 
-one will explode. If both are the same size, both will explode. Two asteroids moving in the 
-same direction will never meet.
+Find out the state of the asteroids after all collisions. If two asteroids meet, the 
+smaller one will explode. If both are the same size, both will explode. Two asteroids 
+moving in the same direction will never meet.
 
 Input: asteroids = [5,10,-5]
 Output: [5,10]
 Explanation: The 10 and -5 collide resulting in 10. The 5 and 10 never collide.
+
+Input: asteroids = [8,-8]
+Output: []
+Explanation: The 8 and -8 collide exploding each other.
 
 Input: asteroids = [10,2,-5]
 Output: [10]
@@ -452,6 +477,25 @@ class Solution(object):
             else:
                 ans.append(new)
         return ans
+
+class Solution:
+    def asteroidCollision(self, asteroids: List[int]) -> List[int]:
+        stack = [] 
+
+        for a in asteroids:
+            while stack and a < 0 and stack[-1] > 0:
+                diff = a + stack[-1]
+                if diff < 0:
+                    stack.pop()
+                elif diff > 0:
+                    a = 0
+                else:
+                    stack.pop()
+                    a = 0
+            if a:
+                stack.append(a)
+
+        return stack
     
 
 
@@ -612,49 +656,3 @@ class Solution:
 
         return sum(stack)
     
-
-
-
-# 17. Asteroid Collision
-"""
-https://leetcode.com/problems/asteroid-collision
-We are given an array asteroids of integers representing asteroids in a row.
-
-For each asteroid, the absolute value represents its size, and the sign represents 
-its direction (positive meaning right, negative meaning left). Each asteroid moves 
-at the same speed.
-
-Find out the state of the asteroids after all collisions. If two asteroids meet, the 
-smaller one will explode. If both are the same size, both will explode. Two asteroids 
-moving in the same direction will never meet.
-
-Input: asteroids = [5,10,-5]
-Output: [5,10]
-Explanation: The 10 and -5 collide resulting in 10. The 5 and 10 never collide.
-
-Input: asteroids = [8,-8]
-Output: []
-Explanation: The 8 and -8 collide exploding each other.
-
-Input: asteroids = [10,2,-5]
-Output: [10]
-Explanation: The 2 and -5 collide resulting in -5. The 10 and -5 collide resulting in 10.
-"""
-class Solution:
-    def asteroidCollision(self, asteroids: List[int]) -> List[int]:
-        stack = [] 
-
-        for a in asteroids:
-            while stack and a < 0 and stack[-1] > 0:
-                diff = a + stack[-1]
-                if diff < 0:
-                    stack.pop()
-                elif diff > 0:
-                    a = 0
-                else:
-                    stack.pop()
-                    a = 0
-            if a:
-                stack.append(a)
-
-        return stack
