@@ -71,7 +71,7 @@ class Solution:
                 if needle[i] != haystack[window_start + i]:
                     break
 
-                if i == m -1:
+                if i == n - 1:
                     return window_start # first index
                 
         return -1
@@ -97,11 +97,16 @@ Explanation: There is no common prefix among the input strings.
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
         res = ""
-        for i in range(len(strs[0])):
+        common_prefix = strs[0]
+
+        for i in range(len(common_prefix)):
+            # check whether char at index `i` is common prefix in all the strings
             for s in strs:
-                if i == len(s) or s[i] != strs[0][i]:
+                if i == len(s) or s[i] != common_prefix[i]:
                     return res
-            res += strs[0][i]
+            # add common_prefix[i] to the result
+            res += common_prefix[i]
+
         return res
 
 
