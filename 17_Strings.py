@@ -66,13 +66,9 @@ class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
         m, n = len(haystack), len(needle)
 
-        for window_start in range(m - n + 1):
-            for i in range(n):
-                if needle[i] != haystack[window_start + i]:
-                    break
-
-                if i == n - 1:
-                    return window_start # first index
+        for i in range(m - n + 1):
+            if haystack[i:i+n] == needle:
+                return i
                 
         return -1
     

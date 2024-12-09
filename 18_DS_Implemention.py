@@ -319,6 +319,33 @@ Implement the LRUCache class:
 
 The functions get and put must each run in O(1) average time complexity.
 """
+# Solition 1 : Using OrderedDict
+
+import collections
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.ordered_dict = collections.OrderedDict()
+        
+
+    def get(self, key: int) -> int:
+        if key not in self.ordered_dict:
+            return -1
+        
+        self.ordered_dict.move_to_end(key, last=True)
+        return self.ordered_dict[key]
+        
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.ordered_dict:
+            self.ordered_dict.move_to_end(key, last=True)
+
+        self.ordered_dict[key] = value
+        if len(self.ordered_dict) > self.capacity:
+            self.ordered_dict.popitem(last=False)
+
+# Solition 2 : Using LinkedList
 class DLinkedNode(): 
     def __init__(self):
         self.key = 0
