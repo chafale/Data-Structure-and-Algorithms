@@ -2371,3 +2371,4 @@ class Solution:
                 maxRank = max(currentRank, maxRank)
 
         return maxRank
+    
