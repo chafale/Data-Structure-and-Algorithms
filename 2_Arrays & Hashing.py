@@ -994,3 +994,34 @@ class Solution:
                 squares[(r//3, c//3)].add(val)
 
         return True
+    
+
+
+
+# 27. Rotate Image
+"""
+https://leetcode.com/problems/rotate-image/description/
+You are given an n x n 2D matrix representing an image, 
+rotate the image by 90 degrees (clockwise).
+
+You have to rotate the image in-place, which means you have to modify 
+the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.
+
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [[7,4,1],[8,5,2],[9,6,3]]
+"""
+# Solution 1 : 
+# 1. Do Transpose of the matrix (i.e change col into rows and rows into cols) 
+# 2. reverse each row  
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        row = len(matrix)
+        
+        # Transpose the matrix
+        for i in range(row):
+            for j in range(i + 1):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+        
+        # Reverse each row
+        for i in range(row):
+            matrix[i].reverse()

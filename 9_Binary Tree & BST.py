@@ -370,7 +370,7 @@ class Solution:
 
 # Leetcode accepted
 class Solution:
-    def verticalTraversal(self, root: TreeNode) -> List[List[int]]:
+    def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if root is None:
             return []
 
