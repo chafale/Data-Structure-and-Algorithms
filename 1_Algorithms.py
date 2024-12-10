@@ -204,3 +204,36 @@ class Solution:
             currMax = temp
             res = max(res, currMax)
         return res
+    
+
+
+
+# 7. Subarray Sum Equals K
+"""
+* * Good Question
+https://leetcode.com/problems/subarray-sum-equals-k
+Given an array of integers nums and an integer k, return the total number of subarrays 
+whose sum equals to k.
+
+A subarray is a contiguous non-empty sequence of elements within an array.
+
+Input: nums = [1,1,1], k = 2
+Output: 2
+
+Input: nums = [1,2,3], k = 3
+Output: 2
+
+https://youtu.be/fFVZt-6sgyo?t=298
+"""
+# Prefix map : <prefix, count>
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        prefixMap = {0 : 1}
+        currSum = 0
+        res = 0
+        for num in nums:
+            currSum += num
+            if currSum - k in prefixMap:
+                res += prefixMap[currSum - k]
+            prefixMap[currSum] = prefixMap.get(currSum, 0) + 1
+        return res
