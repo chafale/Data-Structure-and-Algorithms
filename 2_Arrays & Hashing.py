@@ -826,6 +826,8 @@ class Solution:
         Do not return anything, modify nums1 in-place instead.
         """
         p1, p2, last = m-1, n-1, len(nums1) - 1
+
+        # merge in reverse order
         while p1 >= 0 and p2 >= 0:
             if nums1[p1] > nums2[p2]:
                 nums1[last] = nums1[p1]
