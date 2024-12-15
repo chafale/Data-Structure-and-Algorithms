@@ -64,6 +64,14 @@ class Trie:
 
         return True
     
+"""
+Time complexity of insertion, deletion and searching for a string of length 'k' in the Trie data structure is:
+1. Insert – O(k)
+2. Delete – O(k)
+3. Search – O(k)
+4. The time complexity for building a Trie data structure is O(N * avgL), 
+   where 'N' is the number of strings we want to insert in Trie and 'avgL' is the average length of 'N' strings.
+"""
 
 
 
