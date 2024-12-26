@@ -650,11 +650,14 @@ Output: 2
 
 Input: nums = [1,2,3], k = 3
 Output: 2
+
+Input: nums = [1,2,3,-3,1,1,1,4,2,-3], k = 3
+Output: 8
 """
 # Prefix map : <prefix, count>
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
-        prefixMap = {0 : 1}
+        prefixMap = {0 : 1} # prefix_sum and it's count
         currSum = 0
         res = 0
         for num in nums:

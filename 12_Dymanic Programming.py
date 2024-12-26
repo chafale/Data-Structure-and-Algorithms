@@ -10,7 +10,7 @@ It can be applied where there is :-
 
 Identification of the DP problem:
 1. Count the total number of ways
-2. Minimize and Miaximize the output
+2. Minimize and Maximize the output
 
 Memoization : Recursion: (Top-down) when we store value of subproblem in a map/table
 Tabulation: (Bottom-up) Start from base case to required problem

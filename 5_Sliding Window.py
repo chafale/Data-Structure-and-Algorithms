@@ -5,9 +5,58 @@ from collections import Counter
 import heapq
 import math
 
+"""
+===================================================================================================
+ TWO POINTERS AND SLIDING WINDOW PATTERNS
+===================================================================================================
+
+    1. Constant window size
+    Pick the k elements consecutively from the array
+    e.g : nums = [-1, 2, 3 , 3, 4, 5, -1, -2] k = 4
+
+    ** Most frequently asked pattern
+    2. Longest subarray / substring where <condition>   
+    e.g : Longest subarray where sum of elements is greater than or equal to k
+    
+            l, r = 0, 0
+            max_sum = 0
+            max_len = 0
+            while r < len(nums):
+                max_sum += nums[r]
+
+                # check if the window id invalid
+                while max_sum > k:
+                    max_sum -= nums[l]
+                    l += 1
+
+                # check if the window is valid
+                if max_sum <= k: 
+                    max_len = max(max_len, r - l + 1)
+
+                r += 1
+ 
+            return max_len
+
+    3. Shortest / Minimum window with < condition >
+        Approach :
+        1. First find the valid window 
+        2. Then try to skrink window size until it's valid
+
+    4. Fourth pattern is the subarray count :
+       Number of subarrays with sum equal to target = (Number of subarrays with sum <= target) - (Number of subarrays with sum <= target - 1)
+
+        * Subarrays with sum less than or equal to target include subarrays that have sums less than and equal to the target.
+        * Subarrays with sum less than or equal to target - 1 only include those subarrays whose sums are strictly less than the target.
+        * So, the difference between these two counts gives you only the subarrays whose sum is exactly equal to the target.
+"""
+
+
+
+
 # Problem 1 - Sliding Window Maximum
 """
 * * HARD PROBLEM
+https://leetcode.com/problems/sliding-window-maximum/description/
 You are given an array of integers nums, there is a sliding window of size k which is moving 
 from the very left of the array to the very right. You can only see the k numbers in the window. 
 Each time the sliding window moves right by one position.
@@ -48,7 +97,7 @@ class Solution:
                 q.popleft()
 
             # if window is of size k
-            if (r + 1) >= k:
+            if (r - l) + 1 >= k:
                 result.append(nums[q[0]])
                 l += 1
 
@@ -151,6 +200,26 @@ class Solution:
             res = max(res, r - l + 1)
         return res
 
+# standard pattern solution
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        l, r = 0, 0
+        char_freq_cnt = {}
+        max_freq_so_far = 0
+        substr_len = 0
+        while r < len(s):
+            char_freq_cnt[s[r]] = char_freq_cnt.get(s[r], 0) + 1
+            max_freq_so_far = max(max_freq_so_far, char_freq_cnt[s[r]])
+
+            # check if the window is invalid
+            if (r - l + 1) - max_freq_so_far > k:
+                char_freq_cnt[s[l]] -= 1
+                l += 1
+
+            substr_len = max(substr_len, (r - l + 1))
+            r += 1
+
+        return substr_len
 
 
 
@@ -309,7 +378,7 @@ class Solution:
         return count
     
 
-
+ 
 
 # 9. Max Consecutive Ones III
 """
@@ -324,6 +393,7 @@ Explanation: [1,1,1,0,0,1,1,1,1,1,1]
                         -----------
 Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
 """
+# Approach : Find the longest subarray with atmost k 0's
 class Solution:
     def longestOnes(self, nums: List[int], k: int) -> int:
         res = 0
@@ -344,3 +414,297 @@ class Solution:
             r += 1
 
         return res
+
+
+
+
+# 10. Maximum Points You Can Obtain from Cards 
+"""
+https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/description/
+
+There are several cards arranged in a row, and each card has an associated number 
+of points. The points are given in the integer array cardPoints.
+
+In one step, you can take one card from the beginning or from the end of the row. 
+You have to take exactly k cards.
+
+Your score is the sum of the points of the cards you have taken.
+
+Given the integer array cardPoints and the integer k, return the 
+maximum score you can obtain.
+
+
+Example 1:
+
+Input: cardPoints = [1,2,3,4,5,6,1], k = 3
+Output: 12
+Explanation: After the first step, your score will always be 1. However, choosing the rightmost card first will maximize your total score. The optimal strategy is to take the three cards on the right, giving a final score of 1 + 6 + 5 = 12.
+Example 2:
+
+Input: cardPoints = [2,2,2], k = 2
+Output: 4
+Explanation: Regardless of which two cards you take, your score will always be 4.
+Example 3:
+
+Input: cardPoints = [9,7,7,9,7,7,9], k = 7
+Output: 55
+Explanation: You have to take all the cards. Your score is the sum of points of all cards.
+
+https://www.youtube.com/watch?v=pBWCOCS636U&list=PLgUwDviBIf0q7vrFA_HEWcqRqMpCXzYAL&index=2
+"""
+class Solution:
+    """
+      [ 1, 2, 3, 4, 5, 6, 1 ]
+       ___________
+                 ^        ^
+                 |        |
+                 l_ptr    r_ptr
+    """
+    def maxScore(self, cardPoints: List[int], k: int) -> int:
+        if k == len(cardPoints):
+            return sum(cardPoints)
+
+        l_sum = sum(cardPoints[:k])
+        r_sum = 0
+
+        l_ptr, r_ptr = k - 1, len(cardPoints) - 1
+
+        max_sum = l_sum + r_sum
+
+        while l_ptr >= 0:
+            l_sum = l_sum - cardPoints[l_ptr]
+            l_ptr -= 1
+
+            r_sum = r_sum + cardPoints[r_ptr]
+            r_ptr -= 1
+
+            max_sum = max(max_sum, l_sum + r_sum)
+
+        return max_sum
+
+
+
+
+# 11. Fruit Into Baskets 
+"""
+https://leetcode.com/problems/fruit-into-baskets/description/
+You are visiting a farm that has a single row of fruit trees arranged from left to right. 
+The trees are represented by an integer array fruits where fruits[i] is the type of fruit the ith tree produces.
+
+You want to collect as much fruit as possible. However, the owner has some strict rules 
+that you must follow:
+1. You only have two baskets, and each basket can only hold a single type of fruit. There is no 
+   limit on the amount of fruit each basket can hold.
+2. Starting from any tree of your choice, you must pick exactly one fruit from every tree (including 
+   the start tree) while moving to the right. The picked fruits must fit in one of your baskets.
+3. Once you reach a tree with fruit that cannot fit in your baskets, you must stop.
+
+Given the integer array fruits, return the maximum number of fruits you can pick.
+
+Example 1:
+
+Input: fruits = [1,2,1]
+Output: 3
+Explanation: We can pick from all 3 trees.
+Example 2:
+
+Input: fruits = [0,1,2,2]
+Output: 3
+Explanation: We can pick from trees [1,2,2].
+If we had started at the first tree, we would only pick from trees [0,1].
+Example 3:
+
+Input: fruits = [1,2,3,2,2]
+Output: 4
+Explanation: We can pick from trees [2,3,2,2].
+If we had started at the first tree, we would only pick from trees [1,2].
+"""
+class Solution:
+    def totalFruit(self, fruits: List[int]) -> int:
+        l, r = 0, 0
+        basket_map = {} # hashmap <fruits, frequency>
+        max_len = 0
+
+        while r < len(fruits):
+            basket_map[fruits[r]] = basket_map.get(fruits[r], 0) + 1
+
+            # check if the sliding window is invalid
+            while len(basket_map) > 2:
+                basket_map[fruits[l]] -= 1
+                if basket_map[fruits[l]] == 0:
+                    del basket_map[fruits[l]]
+                l += 1
+
+            max_len = max(max_len, r - l + 1)
+
+            r += 1
+
+        return max_len
+
+
+
+
+# 12. Longest Substring with At Most K Distinct Characters 
+# solution is same as above
+"""
+https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/description/
+Given a string s and an integer k, return the length of the longest 
+substring of s that contains at most k distinct characters.
+
+Example 1:
+
+Input: s = "eceba", k = 2
+Output: 3
+Explanation: The substring is "ece" with length 3.
+Example 2:
+
+Input: s = "aa", k = 1
+Output: 2
+Explanation: The substring is "aa" with length 2.
+"""
+class Solution:
+    def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
+        l, r = 0, 0
+        distinct_character_map = {}
+        max_len = 0
+        while r < len(s):
+            distinct_character_map[s[r]] = distinct_character_map.get(s[r], 0) + 1
+
+            # check if the slinding window condition is invalid
+            while len(distinct_character_map) > k:
+                distinct_character_map[s[l]] -= 1
+                if distinct_character_map[s[l]] == 0:
+                    del distinct_character_map[s[l]]
+                l += 1
+
+            max_len = max(max_len, r - l + 1)
+
+            r += 1
+
+        return max_len
+
+
+
+
+# 13. Number of Substrings Containing All Three Characters 
+"""
+*** Tricky question might skip while revision
+https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/description/
+Given a string s consisting only of characters a, b and c.
+
+Return the number of substrings containing at least one occurrence of all these characters a, b and c.
+
+ 
+
+Example 1:
+
+Input: s = "abcabc"
+Output: 10
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc" and "abc" (again). 
+Example 2:
+
+Input: s = "aaacb"
+Output: 3
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "aaacb", "aacb" and "acb". 
+Example 3:
+
+Input: s = "abc"
+Output: 1
+
+https://youtu.be/xtqN4qlgr8s?list=PLgUwDviBIf0q7vrFA_HEWcqRqMpCXzYAL&t=420
+"""
+
+class Solution:
+    def numberOfSubstrings(self, s: str) -> int:
+        r = 0
+        last_seen = {'a': -1, 'b': -1, "c": -1} # last seen of characters a, b, c
+        substr_cnt = 0
+        while r < len(s):
+            last_seen[s[r]] = r
+
+            if last_seen['a'] != -1 and last_seen['b'] != -1 and last_seen['c'] != -1:
+                # finding the occurrence of thr min window of `abc` and every character 
+                # before it will alway be the substr of `abc`
+                substr_cnt += 1 + min(last_seen['a'], last_seen['b'], last_seen['c'])
+            r += 1
+
+        return substr_cnt
+    
+
+
+
+# 14. Binary Subarrays With Sum 
+"""
+https://leetcode.com/problems/binary-subarrays-with-sum/description/
+
+Given a binary array nums and an integer goal, return the number of non-empty subarrays with a sum goal.
+
+A subarray is a contiguous part of the array.
+
+ Example 1:
+
+Input: nums = [1,0,1,0,1], goal = 2
+Output: 4
+Explanation: The 4 subarrays are bolded and underlined below:
+[1,0,1,0,1]
+[1,0,1,0,1]
+[1,0,1,0,1]
+[1,0,1,0,1]
+Example 2:
+
+Input: nums = [0,0,0,0,0], goal = 0
+Output: 15
+
+https://youtu.be/XnMdNUkX6VM?list=PLgUwDviBIf0q7vrFA_HEWcqRqMpCXzYAL&t=1024
+"""
+
+# Solution 1 : Using prefix sum and counting the number of prefix with sum equal to goal
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        prefix_sum_freq_map = {0: 1}
+        res = 0
+        curr_sum = 0
+        for num in nums:
+            curr_sum += num
+            if curr_sum - goal in prefix_sum_freq_map:
+                res += prefix_sum_freq_map[curr_sum - goal]
+            prefix_sum_freq_map[curr_sum] = prefix_sum_freq_map.get(curr_sum, 0) + 1
+        return res
+    
+# Solution 2 : Using sliding window
+# Approach : solve using the 4th pattern above 
+# Number of subarrays with sum equal to target = (Number of subarrays with sum <= target) - (Number of subarrays with sum <= target - 1)
+        # * Subarrays with sum less than or equal to target include subarrays that have sums less than and equal to the target.
+        # * Subarrays with sum less than or equal to target - 1 only include those subarrays whose sums are strictly less than the target.
+        # * So, the difference between these two counts gives you only the subarrays whose sum is exactly equal to the target.
+
+
+
+
+# 15. Count Number of Nice Subarrays
+"""
+Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
+
+Return the number of nice sub-arrays.
+
+Example 1:
+
+Input: nums = [1,1,2,1,1], k = 3
+Output: 2
+Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+Example 2:
+
+Input: nums = [2,4,6], k = 1
+Output: 0
+Explanation: There are no odd numbers in the array.
+Example 3:
+
+Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+Output: 16
+"""
+# This problem is same as the problem 14 - Binary Subarrays With Sum 
+# just change all even numbers to zero and all odd numbers to one and solve the problem using any method above
+
+
+
+
