@@ -1163,55 +1163,68 @@ class Solution:
 * * HARD PROBLEM * *
 https://leetcode.com/problems/alien-dictionary/
 
+There is a new alien language that uses the English alphabet. 
+However, the order of the letters is unknown to you.
+
+You are given a list of strings words from the alien language's dictionary. 
+Now it is claimed that the strings in words are sorted lexicographically
+by the rules of this new language.
+
+If this claim is incorrect, and the given arrangement of string in words 
+cannot correspond to any order of letters, return "".
+
+Otherwise, return a string of the unique letters in the new alien language sorted 
+in lexicographically increasing order by the new language's rules. 
+
+If there are multiple solutions, return any of them.
+
 Example 1: 
 Input: words = ["wrt","wrf","er","ett","rftt"]
 Output: "wertf"
 """
 # create a DAG and apply toposort
+from collections import defaultdict, Counter, deque
+
 class Solution:
     def alienOrder(self, words: List[str]) -> str:
+        adj_list = defaultdict(set)
 
-        # create a adj martix
-        adj_matrix = {}
-        for word in words:
-            for char in word:
-                if char not in adj_matrix:
-                    adj_matrix[char] = []
+        # set indegree of all unique chars in words list to zero
+        indegree = Counter({c: 0 for word in words for c in word})
 
-        # create DAG
-        for i in range(0, len(words)-1):
-            # comparing string i and i+1
-            str_len = min(len(words[i]), len(words[i+1]))
-            for j in range(str_len):
-                if words[i][j] != words[i+1][j]:
-                    adj_matrix[words[i][j]].append(words[i+1][j])
+        for first_word, second_word in zip(words, words[1:]):
+            for first_char, second_char in zip(first_word, second_word):
+                if first_char != second_char:
+                    if second_char not in adj_list[first_char]:
+                        adj_list[first_char].add(second_char)
+                        indegree[second_char] += 1
                     break
+            else:  # Check that second word isn't a prefix of first word.
+                if len(first_word) > len(second_word):
+                    return ""
 
-        # calculate indegree
-        indegree = {c:0 for c in adj_matrix}
-        for c in adj_matrix:
-            for neighbour in adj_matrix[c]:
-                indegree[neighbour] += 1
+        # apply topo-sort
+        sort_output = []
+        q = deque()
 
-        queue = []
-        for node in indegree:
-            if indegree[node] == 0:
-                queue.append(node)
+        for char in indegree:
+            if indegree[char] == 0:
+                q.append(char)
 
-        dict_order = []
+        while q:
+            pop_char = q.popleft()
 
-        while queue:
-            tmp = queue.pop()
-            dict_order.append(tmp)
+            sort_output.append(pop_char)
 
-            for neighbour in adj_matrix[tmp]:
+            for neighbour in adj_list[pop_char]:
                 indegree[neighbour] -= 1
                 if indegree[neighbour] == 0:
-                    queue.append(neighbour)
+                    q.append(neighbour)
+                    
+        if len(sort_output) < len(indegree):
+            return ""
 
-        if len(dict_order) == len(adj_matrix):
-            return "".join(dict_order)
-        return ""
+        return "".join(sort_output)
 
 
 
