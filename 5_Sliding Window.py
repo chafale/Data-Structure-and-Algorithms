@@ -438,7 +438,9 @@ Example 1:
 
 Input: cardPoints = [1,2,3,4,5,6,1], k = 3
 Output: 12
-Explanation: After the first step, your score will always be 1. However, choosing the rightmost card first will maximize your total score. The optimal strategy is to take the three cards on the right, giving a final score of 1 + 6 + 5 = 12.
+Explanation: After the first step, your score will always be 1. 
+However, choosing the rightmost card first will maximize your total score. 
+The optimal strategy is to take the three cards on the right, giving a final score of 1 + 6 + 5 = 12.
 Example 2:
 
 Input: cardPoints = [2,2,2], k = 2
@@ -600,7 +602,8 @@ Example 1:
 
 Input: s = "abcabc"
 Output: 10
-Explanation: The substrings containing at least one occurrence of the characters a, b and c are "abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc" and "abc" (again). 
+Explanation: The substrings containing at least one occurrence of the characters 
+a, b and c are "abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc" and "abc" (again). 
 Example 2:
 
 Input: s = "aaacb"
@@ -678,6 +681,9 @@ class Solution:
         # * Subarrays with sum less than or equal to target - 1 only include those subarrays whose sums are strictly less than the target.
         # * So, the difference between these two counts gives you only the subarrays whose sum is exactly equal to the target.
 
+# To get the count of subarrays
+# https://youtu.be/XnMdNUkX6VM?list=PLgUwDviBIf0q7vrFA_HEWcqRqMpCXzYAL&t=587)
+
 
 
 
@@ -705,6 +711,53 @@ Output: 16
 # This problem is same as the problem 14 - Binary Subarrays With Sum 
 # just change all even numbers to zero and all odd numbers to one and solve the problem using any method above
 
+
+
+
+# 16. Subarrays with K Different Integers 
+"""
+https://leetcode.com/problems/subarrays-with-k-different-integers/description/
+Given an integer array nums and an integer k, return the number of good subarrays of nums.
+
+A good array is an array where the number of different integers in that array is exactly k.
+
+For example, [1,2,3,1,2] has 3 different integers: 1, 2, and 3.
+A subarray is a contiguous part of an array.
+
+Example 1:
+
+Input: nums = [1,2,1,2,3], k = 2
+Output: 7
+Explanation: Subarrays formed with exactly 2 different integers: [1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2]
+Example 2:
+
+Input: nums = [1,2,1,3,4], k = 3
+Output: 3
+Explanation: Subarrays formed with exactly 3 different integers: [1,2,1,3], [2,1,3], [1,3,4].
+"""
+# Approach : solve using the 4th pattern above
+class Solution:
+    def subarraysWithKDistinct(self, nums: List[int], k: int) -> int:
+        def num_subarray_with_atmost_k_distinct_integers(nums, k) -> int:
+            l, r = 0, 0
+            distinct_map = {}
+            cnt = 0
+            while r < len(nums):
+                distinct_map[nums[r]] = distinct_map.get(nums[r], 0) + 1
+
+                while len(distinct_map) > k:
+                    distinct_map[nums[l]] -= 1
+                    if distinct_map[nums[l]] == 0:
+                        del distinct_map[nums[l]]
+                    l += 1
+
+                cnt += (r - l + 1) # count of subarray from l to r (https://youtu.be/XnMdNUkX6VM?list=PLgUwDviBIf0q7vrFA_HEWcqRqMpCXzYAL&t=587)
+
+                r += 1
+            return cnt
+
+        return num_subarray_with_atmost_k_distinct_integers(nums, k) - num_subarray_with_atmost_k_distinct_integers(nums, k - 1)
+    
 
 
 
