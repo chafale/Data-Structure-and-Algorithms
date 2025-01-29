@@ -223,6 +223,9 @@ Output: 2
 Input: nums = [1,2,3], k = 3
 Output: 2
 
+Input: nums = [1,2,3,-3,1,1,1,4,2,-3], k = 3
+Output: 8
+
 https://youtu.be/fFVZt-6sgyo?t=298
 """
 # Prefix map : <prefix, count>

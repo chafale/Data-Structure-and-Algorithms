@@ -24,7 +24,7 @@ import math
             while r < len(nums):
                 max_sum += nums[r]
 
-                # check if the window id invalid
+                # check if the window is invalid
                 while max_sum > k:
                     max_sum -= nums[l]
                     l += 1
